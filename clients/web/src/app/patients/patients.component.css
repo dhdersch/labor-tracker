@@ -1,0 +1,19 @@
+tr {
+    cursor: pointer;
+}
+
+.table-danger, .table-danger > th, .table-danger > td {
+    background-color: #F3969A;
+}
+
+.table-hover .table-danger:hover, .table-hover .table-danger:hover>th, .table-hover .table-danger:hover>td {
+    background-color: #FF7851;
+}
+
+.table-selected > td{
+    border-color: black; 
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+}

@@ -1,0 +1,9 @@
+sup {
+  vertical-align: super;
+  font-size: smaller;
+}
+
+.card-block{
+  height: 450px;
+  overflow: scroll;
+}

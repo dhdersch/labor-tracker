@@ -1,0 +1,28 @@
+svg {
+  font-family: Sans-Serif, Arial;
+  padding: 40px;
+  box-sizing: content-box;
+}
+
+.line {
+  stroke-width: 2;
+  fill: none;
+}
+
+.axis path {
+  stroke: black;
+}
+
+.text {
+  font-size: 12px;
+}
+
+.title-text {
+  font-size: 12px;
+}
+
+.bottom-left {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}

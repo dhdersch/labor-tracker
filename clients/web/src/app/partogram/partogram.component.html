@@ -1,0 +1,25 @@
+<div class="row col-md-12">
+    <div class="form-group col-md-4">
+        <label class="col-form-label col-form-label-sm" for="inputSmall">Dilation</label>
+        <select class="form-control" [(ngModel)]="currentDilation" name="currentDilation">
+            <option *ngFor="let dilation of patientService.remainingDilations; let i = index;" [ngValue]="dilation" selected="{{i == 0 ? 'selected' : ''}}">
+                {{dilation}}
+            </option>
+        </select>
+    </div>
+    <div class="form-group col-md-4">
+        <label class="col-form-label col-form-label-sm" for="inputSmall">Duration</label>
+        <select class="form-control" [(ngModel)]="currentDuration" name="currentDuration">
+            <option *ngFor="let duration of patientService.remainingDurations; let i = index;" [ngValue]="duration" selected="{{i == 0 ? 'selected' : ''}}">
+                {{duration}}
+            </option>
+        </select>
+    </div>
+    <div class="form-group col-md-4">
+        <button class="btn btn-secondary pt-1 my-2 my-md-0 bottom-left" (click)="onNewDilationClick()">
+            <span class="glyphicon glyphicon-plus">Add Dilation Point</span> 
+        </button>
+    </div>
+    
+</div>
+<div class="row"><svg /></div>
