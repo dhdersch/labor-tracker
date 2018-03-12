@@ -1,0 +1,30 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "Regency Component API"
+paths:
+  '/patients':
+    get:
+      operationId: GetAllPatients
+      summary: Get the semantic version of the API
+    post:
+      operationId: CreateNewPatient
+      summary: Creates a new patient
+  '/patients/{patient_id}':
+    get:
+      operationId: GetPatient
+      summary: Get specified patient
+    put:
+      operationId: UpdatePatient
+      summary: Update the specified patient
+    delete:
+      operationId: DeletePatient
+      summary: Deletes a patient
+    
+  '/patients/{patient_id}/{labor_id}/data':
+    post:
+      operationId: AddPatientData
+      summary: Add a measurement for the patient
+      
+  '/clinician'
+

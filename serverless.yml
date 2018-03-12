@@ -1,0 +1,48 @@
+service:
+  name: labor-tracker
+custom: ${file(serverless-config/${opt:stage, 'dev'}.yml)}
+provider:
+  name: aws
+  runtime: python3.6
+  region: ${self:custom.region}
+  deploymentBucket: 
+    name: labor-tracker
+    serverSideEncryption: AES256
+  environment:
+    PATIENTS_TABLE: patients-${self:custom.stage}
+    CLINICIANS_TABLE: clinicians-${self:custom.stage}
+  profile: ${opt:profile}
+  iamRoleStatements:
+
+functions:
+  laborTrackerAPI:
+    handler: ?.handler
+
+resources:
+  Resources:
+    Patients:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: patients-${self:custom.stage}
+        AttributeDefinitions:
+          - AttributeName: key
+            AttributeType: S
+        KeySchema:
+          - AttributeName: key
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    # Clinicians:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #     TableName: clinicians-${self:custom.stage}
+    #     AttributeDefinitions:
+    #       - AttributeName: key
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: key
+    #         KeyType: HASH
+    #     ProvisionedThroughput:
+    #       ReadCapacityUnits: 1
+    #       WriteCapacityUnits: 1
