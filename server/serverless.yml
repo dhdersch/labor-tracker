@@ -1,5 +1,8 @@
 service:
   name: labor-tracker
+plugins: 
+  - serverless-python-requirements
+  - serverless-wsgi
 custom: ${file(serverless-config/${opt:stage, 'dev'}.yml)}
 provider:
   name: aws
@@ -13,10 +16,23 @@ provider:
     CLINICIANS_TABLE: clinicians-${self:custom.stage}
   profile: ${opt:profile}
   iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - { "Fn::GetAtt": ["Patients", "Arn" ] }
 
 functions:
   laborTrackerAPI:
-    handler: ?.handler
+    handler: wsgi.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
 
 resources:
   Resources:

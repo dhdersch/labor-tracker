@@ -27,3 +27,6 @@ target/api/
 target/maven-archiver/
 target/maven-status/
 target/surefire-reports/
+
+*node_modules
+.serverless
