@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { PartogramComponent } from './partogram/partogram.component';
 import { PatientsComponent } from './patients/patients.component';
+import { GoogleSignInComponent } from 'angular-google-signin'
 
 // Services
 import { PatientsService } from './patients.service';
@@ -16,7 +17,8 @@ import { D3Service } from 'd3-ng2-service';
   declarations: [
     AppComponent,
     PartogramComponent,
-    PatientsComponent
+    PatientsComponent,
+    GoogleSignInComponent
   ],
   imports: [
     BrowserModule,

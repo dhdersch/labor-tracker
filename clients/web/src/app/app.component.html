@@ -39,6 +39,24 @@
   <div class="col-md-6">
     <div class="card">
       <div class="card-header bg-primary text-white">
+        LOGIN please...
+      </div>
+      <div class="card-block">
+        <google-signin
+          [clientId]="myClientId"
+          [width]="myWidth"
+          [theme]="myTheme"
+          [scope]="myScope"
+          [longTitle]="myLongTitle"
+          (googleSignInSuccess)="onGoogleSignInSuccess($event)">
+        </google-signin>
+      </div>
+    </div>
+  </div>
+<!-- <div class="row col-md-12 m-1">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
         Patients
       </div>
       <div class="card-block">
@@ -56,6 +74,5 @@
       </div>
     </div>
   </div>
-</div>
-
+</div> -->
 
