@@ -20,3 +20,10 @@ Directions (within the /server directory):
 
 2. npm install
 3. sls deploy --profile {your profile}
+
+
+## Client
+
+ng serve
+
+localhost:4200
