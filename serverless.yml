@@ -1,8 +1,5 @@
 service:
   name: labor-tracker
-plugins: 
-  - serverless-python-requirements
-  - serverless-wsgi
 custom: ${file(serverless-config/${opt:stage, 'dev'}.yml)}
 provider:
   name: aws
@@ -14,6 +11,7 @@ provider:
   environment:
     PATIENTS_TABLE: patients-${self:custom.stage}
     CLINICIANS_TABLE: clinicians-${self:custom.stage}
+    BUCKET: labor-tracker
   profile: ${opt:profile}
   iamRoleStatements:
     - Effect: Allow
@@ -26,13 +24,52 @@ provider:
         - dynamodb:DeleteItem
       Resource:
         - { "Fn::GetAtt": ["Patients", "Arn" ] }
+    - Effect: Allow
+      Action: "s3:*"
+      Resource: "arn:aws:s3:::labor-tracker/users/*"
+    - Effect: Allow
+      Action: s3:ListBucket
+      Resource: "arn:aws:s3:::labor-tracker"
+
+package:
+  include:
+    - endpoints/**
+  exclude:
+    - serverless-config/**
+    - bin/**
+    - clients/**
+    - node_modules/**
+    - openapi/**
+    - serverless-config/**
+    - venv/**
 
 functions:
-  laborTrackerAPI:
-    handler: wsgi.handler
+  get_patient:
+    handler: endpoints/get_patient.handler
     events:
-      - http: ANY /
-      - http: 'ANY {proxy+}'
+    - http:
+        path: patient
+        method: get
+        cors: true
+        authorizer: aws_iam
+
+  update_patient:
+    handler: endpoints/update_patient.handler
+    events:
+    - http:
+        path: patient/update
+        method: put
+        cors: true
+        authorizer: aws_iam
+
+  put_patient:
+    handler: endpoints/put_patient.handler
+    events:
+    - http:
+        path: patient
+        method: put
+        cors: true
+        authorizer: aws_iam
 
 resources:
   Resources:
