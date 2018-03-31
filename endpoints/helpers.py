@@ -12,7 +12,12 @@ def make_response(code, body):
 
     return {
         "statusCode": code,
-        "body": json.dumps(body)
+        "body": json.dumps(body),
+        "headers": {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": True,
+            "Content-Type": "application/json"
+        }
     }
 
 

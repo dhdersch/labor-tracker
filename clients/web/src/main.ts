@@ -1,8 +1,8 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import * as AWS from 'aws-sdk'
+import * as AWS from 'aws-sdk';
 
-import { AppModule } from './app2/app2.module';
+import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
 if (environment.production) {
@@ -12,4 +12,4 @@ if (environment.production) {
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.log(err));
 
-AWS.config.region = 'us-east-1'
+AWS.config.region = 'us-east-1';

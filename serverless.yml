@@ -14,16 +14,16 @@ provider:
     BUCKET: labor-tracker
   profile: ${opt:profile}
   iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource:
-        - { "Fn::GetAtt": ["Patients", "Arn" ] }
+#    - Effect: Allow
+#      Action:
+#        - dynamodb:Query
+#        - dynamodb:Scan
+#        - dynamodb:GetItem
+#        - dynamodb:PutItem
+#        - dynamodb:UpdateItem
+#        - dynamodb:DeleteItem
+#      Resource:
+#        - { "Fn::GetAtt": ["Patients", "Arn" ] }
     - Effect: Allow
       Action: "s3:*"
       Resource: "arn:aws:s3:::labor-tracker/users/*"
@@ -71,21 +71,21 @@ functions:
         cors: true
         authorizer: aws_iam
 
-resources:
-  Resources:
-    Patients:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: patients-${self:custom.stage}
-        AttributeDefinitions:
-          - AttributeName: key
-            AttributeType: S
-        KeySchema:
-          - AttributeName: key
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+#resources:
+#  Resources:
+#    Patients:
+#      Type: AWS::DynamoDB::Table
+#      Properties:
+#        TableName: patients-${self:custom.stage}
+#        AttributeDefinitions:
+#          - AttributeName: key
+#            AttributeType: S
+#        KeySchema:
+#          - AttributeName: key
+#            KeyType: HASH
+#        ProvisionedThroughput:
+#          ReadCapacityUnits: 1
+#          WriteCapacityUnits: 1
     # Clinicians:
     #   Type: AWS::DynamoDB::Table
     #   Properties:
