@@ -46,8 +46,8 @@ export class PatientService {
 
 
     return this.http.put<Patient>(url, patient, options).pipe(
-      tap(_ => console.log(`fetched patient`)),
-      catchError(this.handleError<Patient>(`getPatient`))
+      tap(_ => console.log(`fetched patient`))
+      // catchError(this.handleError<Patient>(`getPatient`))
     );
   }
 
@@ -85,23 +85,46 @@ export class PatientService {
 
     return this.http.get<Patient>(url, options).pipe(
       tap(_ => console.log(`fetched patient`)),
-      catchError(this.handleError<Patient>(`getPatient`))
+      catchError(this.handleNotFound(`getPatient`))
     );
   }
 
-  /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
-   */
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
+  // /**
+  //  * Handle Http operation that failed.
+  //  * Let the app continue.
+  //  * @param operation - name of the operation that failed
+  //  * @param result - optional value to return as the observable result
+  //  */
+  // private handleError<T> (operation = 'operation', result?: T) {
+  //   return (error: any): Observable<T> => {
+  //
+  //     console.error(error);
+  //
+  //     if (error.status === 404) {
+  //       console.log('Patient does not exist yet, so let them create it.')
+  //       const patient = new Patient();
+  //       return of(patient as T);
+  //     }
+  //
+  //
+  //     return of(result as T);
+  //   };
+  // }
+
+
+  private handleNotFound (operation = 'operation', result?: Patient) {
+    return (error: any): Observable<Patient> => {
 
       console.error(error);
 
+      if (error.status === 404) {
+        console.log('Patient does not exist yet, so let them create it.')
+        const patient = new Patient();
+        return of(patient);
+      }
 
-      return of(result as T);
+
+      return of(result as Patient);
     };
   }
 
