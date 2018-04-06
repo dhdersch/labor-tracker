@@ -12,11 +12,13 @@ class PatientRepo(object):
         self.__prefix = kwargs['prefix']
         self.__table = kwargs['table']
 
+    def get_measurements(self, identity, partogram_id):
+        self.__table.query()
+
+
     def add_measurement(self, identity, measurement):
         key = identity + measurement['partogram_id']
-
         measurement['key'] = key
-
         self.__table.put_item(
             Item=measurement
         )

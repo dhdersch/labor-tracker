@@ -15,8 +15,8 @@ def handler(event, context):
     measurement = json.loads(event['body'])
 
     try:
-        patient_data = repo.add_measurement(identity, measurement)
+        repo.add_measurement(identity, measurement)
     except ClientError as e:
         return handle_client_error(e)
 
-    return make_response(200, patient_data)
+    return make_response(200, None)

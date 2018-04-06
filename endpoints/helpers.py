@@ -9,16 +9,19 @@ def parse_identity(event):
 
 
 def make_response(code, body):
-
-    return {
+    response =  {
         "statusCode": code,
-        "body": json.dumps(body),
         "headers": {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Credentials": True,
             "Content-Type": "application/json"
         }
     }
+
+    if body is not None and body != "":
+        response['body'] = json.dumps(body)
+
+    return response
 
 
 def handle_client_error(e):
