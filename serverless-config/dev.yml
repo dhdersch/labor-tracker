@@ -1,0 +1,7 @@
+stage: dev
+region: us-east-1
+wsgi:
+  app: main.app
+  packRequirements: false
+pythonRequirements:
+  dockerizePip: non-linux

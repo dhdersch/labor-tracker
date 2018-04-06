@@ -1,0 +1,101 @@
+service:
+  name: labor-tracker
+custom: ${file(serverless-config/${opt:stage, 'dev'}.yml)}
+provider:
+  name: aws
+  runtime: python3.6
+  region: ${self:custom.region}
+  deploymentBucket: 
+    name: labor-tracker
+    serverSideEncryption: AES256
+  environment:
+    PATIENTS_TABLE: patients-${self:custom.stage}
+    CLINICIANS_TABLE: clinicians-${self:custom.stage}
+    BUCKET: labor-tracker
+  profile: ${opt:profile}
+  iamRoleStatements:
+#    - Effect: Allow
+#      Action:
+#        - dynamodb:Query
+#        - dynamodb:Scan
+#        - dynamodb:GetItem
+#        - dynamodb:PutItem
+#        - dynamodb:UpdateItem
+#        - dynamodb:DeleteItem
+#      Resource:
+#        - { "Fn::GetAtt": ["Patients", "Arn" ] }
+    - Effect: Allow
+      Action: "s3:*"
+      Resource: "arn:aws:s3:::labor-tracker/users/*"
+    - Effect: Allow
+      Action: s3:ListBucket
+      Resource: "arn:aws:s3:::labor-tracker"
+
+package:
+  include:
+    - endpoints/**
+  exclude:
+    - serverless-config/**
+    - bin/**
+    - clients/**
+    - node_modules/**
+    - openapi/**
+    - serverless-config/**
+    - venv/**
+
+functions:
+  get_patient:
+    handler: endpoints/get_patient.handler
+    events:
+    - http:
+        path: patient
+        method: get
+        cors: true
+        authorizer: aws_iam
+
+  update_patient:
+    handler: endpoints/update_patient.handler
+    events:
+    - http:
+        path: patient/update
+        method: put
+        cors: true
+        authorizer: aws_iam
+
+  put_patient:
+    handler: endpoints/put_patient.handler
+    events:
+    - http:
+        path: patient
+        method: put
+        cors: true
+        authorizer: aws_iam
+
+#resources:
+#  Resources:
+#    Patients:
+#      Type: AWS::DynamoDB::Table
+#      Properties:
+#        TableName: patients-${self:custom.stage}
+#        AttributeDefinitions:
+#          - AttributeName: key
+#            AttributeType: S
+#        KeySchema:
+#          - AttributeName: key
+#            KeyType: HASH
+#        ProvisionedThroughput:
+#          ReadCapacityUnits: 1
+#          WriteCapacityUnits: 1
+    # Clinicians:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #     TableName: clinicians-${self:custom.stage}
+    #     AttributeDefinitions:
+    #       - AttributeName: key
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: key
+    #         KeyType: HASH
+    #     ProvisionedThroughput:
+    #       ReadCapacityUnits: 1
+    #       WriteCapacityUnits: 1

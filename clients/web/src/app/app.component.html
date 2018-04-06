@@ -1,61 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" href="/"><img src="assets/img/logo.png" /> {{title}}</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" >
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarColor01">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Patients <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Settings</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Trends</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">About</a>
-      </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search">
-      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-    </form>
-    <ul class="navbar-nav my-2 my-lg-0">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="login" aria-expanded="false"><img style="width:22px;height:22px;" src="assets/img/user.jpg"/> Jane Doe <span class="caret"></span></a>
-        <div class="dropdown-menu" aria-labelledby="login">
-          <a class="dropdown-item" href="/profile">Profile</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="/logout">Logout</a>
-        </div>
-      </li>
-    </ul>
-  </div>
+<h1>{{title}}</h1>
+<nav>
+  <a routerLink="/patient">Patient</a>
+  <a routerLink="/logout">Log Out</a>
 </nav>
-<div class="row col-md-12 m-1">
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header bg-primary text-white">
-        Patients
-      </div>
-      <div class="card-block">
-        <div class="app-patients"></div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header bg-primary text-white">
-        Partogram
-      </div>
-      <div class="card-block">
-        <div class="app-partogram"></div>
-      </div>
-    </div>
-  </div>
-</div>
+<router-outlet></router-outlet>
 
 

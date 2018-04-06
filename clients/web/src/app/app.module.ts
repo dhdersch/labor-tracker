@@ -1,29 +1,34 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 // Components
 import { AppComponent } from './app.component';
-import { PartogramComponent } from './partogram/partogram.component';
-import { PatientsComponent } from './patients/patients.component';
+import { GoogleSignInComponent } from 'angular-google-signin';
+import { PatientDetailComponent } from './patient-detail/patient-detail.component';
+import { LoginComponent } from './login/login.component';
 
 // Services
-import { PatientsService } from './patients.service';
+import { PatientService } from './patient.service';
 import { D3Service } from 'd3-ng2-service';
+import { AuthService } from './auth.service';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PartogramComponent,
-    PatientsComponent
+    GoogleSignInComponent,
+    PatientDetailComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
-    HttpModule,
-    FormsModule
+    HttpClientModule,
+    FormsModule,
+    AppRoutingModule
   ],
-  providers: [D3Service, PatientsService],
+  providers: [D3Service, PatientService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

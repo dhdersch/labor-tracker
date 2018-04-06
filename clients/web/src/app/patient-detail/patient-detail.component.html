@@ -1,0 +1,28 @@
+<div *ngIf="patient">
+
+  <p>
+    Hello, {{patient.initials}}!
+  </p>
+
+
+  <div>
+  <label>Initials:
+    <input [(ngModel)]="patient.initials" placeholder="initials"/>
+  </label>
+  </div>
+
+  <div><label>Age:
+    <input [(ngModel)]="patient.age" placeholder="age"/>
+  </label></div>
+
+  <div><label>Number of vaginal births:
+    <input [(ngModel)]="patient.num_past_vaginal_births" placeholder="number of past vaginal births"/>
+  </label></div>
+
+  <div><label>Room number:
+    <input [(ngModel)]="patient.room_number" placeholder="room number"/>
+  </label></div>
+</div>
+
+
+<button (click)="save()">save</button>
