@@ -5,13 +5,16 @@ from endpoints.patient import PatientRepo
 from endpoints.helpers import *
 
 
-repo = PatientRepo(s3=boto3.resource('s3'), bucket=os.environ.get("BUCKET"), prefix="users/")
+repo = PatientRepo(s3=boto3.resource('s3'),
+                   bucket=os.environ.get("BUCKET"),
+                   prefix="users/",
+                   s3_client=boto3.client('s3'))
 
 
 def handler(event, context):
     identity = parse_identity(event)
     try:
-        patient_data = repo.update_patient(identity, json.loads(event['body']))
+        data = repo.list_measurement_sets(identity)
     except ClientError as e:
         return handle_client_error(e)
-    return make_response(200, patient_data)
+    return make_response(200, data)

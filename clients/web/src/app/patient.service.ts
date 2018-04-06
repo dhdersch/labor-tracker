@@ -85,7 +85,7 @@ export class PatientService {
 
     return this.http.get<Patient>(url, options).pipe(
       tap(_ => console.log(`fetched patient`)),
-      catchError(this.handleNotFound(`getPatient`))
+      catchError(this.handleNotFound())
     );
   }
 
@@ -112,19 +112,16 @@ export class PatientService {
   // }
 
 
-  private handleNotFound (operation = 'operation', result?: Patient) {
+  private handleNotFound () {
     return (error: any): Observable<Patient> => {
 
       console.error(error);
 
-      if (error.status === 404) {
-        console.log('Patient does not exist yet, so let them create it.')
-        const patient = new Patient();
-        return of(patient);
-      }
+      console.log('Patient does not exist yet, so let them create it.')
+      const patient = new Patient();
+      return of(patient);
 
 
-      return of(result as Patient);
     };
   }
 

@@ -5,7 +5,7 @@ from endpoints.patient import PatientRepo
 from endpoints.helpers import *
 
 
-repo = PatientRepo(boto3.resource('s3'), os.environ.get("BUCKET"), "users/")
+repo = PatientRepo(s3=boto3.resource('s3'), bucket=os.environ.get("BUCKET"), prefix="users/")
 
 
 def handler(event, context):

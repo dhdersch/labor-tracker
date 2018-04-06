@@ -9,9 +9,14 @@ repo = PatientRepo(s3=boto3.resource('s3'), bucket=os.environ.get("BUCKET"), pre
 
 
 def handler(event, context):
+
     identity = parse_identity(event)
+
+    measurement = json.loads(event['body'])
+
     try:
-        patient_data = repo.update_patient(identity, json.loads(event['body']))
+        patient_data = repo.add_measurement(identity, measurement)
     except ClientError as e:
         return handle_client_error(e)
+
     return make_response(200, patient_data)

@@ -13,34 +13,25 @@ export class AuthService {
 
   isAuthenticated(): boolean {
 
-    if (AWS.config.credentials == null) {
+    const storedCreds = localStorage.getItem('aws_credentials');
+    if (storedCreds == null) {
       return false;
     }
 
+    const parsedCreds = JSON.parse(storedCreds);
+    const expiration = Date.parse(parsedCreds['expireTime']);
+
+    if (Date.now() >= expiration) {
+      return false;
+    }
+
+    AWS.config.credentials = new Credentials(parsedCreds['accessKeyId'], parsedCreds['secretAccessKey'], parsedCreds['sessionToken']);
+
     return true;
+  }
 
-    // const expiration = localStorage.getItem('google_expires_at');
-    // const token = localStorage.getItem('google_id_token');
-    //
-    // if (token === null) {
-    //   return false;
-    // }
-    //
-    // if (expiration == null) {
-    //   return false;
-    // }
-    //
-    // const expirationDate = new Date(expiration * 1000)
-    //
-    // console.log(expirationDate);
-    // return Date.now() < expirationDate;
+  getCredentials(): void {
 
   }
 
-
-
-
-
-
-
-  }
+}

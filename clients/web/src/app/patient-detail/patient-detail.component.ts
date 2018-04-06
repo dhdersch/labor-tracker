@@ -14,7 +14,9 @@ export class PatientDetailComponent implements OnInit {
 
 
   ngOnInit() {
-    console.log('PatientDetailComponent - ngOnInit')
+    console.log('PatientDetailComponent - ngOnInit');
+
+    console.log(localStorage.getItem('aws_credentials'))
     this.getPatient();
   }
 

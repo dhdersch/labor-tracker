@@ -1,13 +1,48 @@
 import json
 from botocore.exceptions import ClientError
+import uuid
 
 
 class PatientRepo(object):
 
-    def __init__(self, s3_resource, bucket, prefix):
-        self.__s3_resource = s3_resource
-        self.__bucket = bucket
-        self.__prefix = prefix
+    def __init__(self, **kwargs):
+        self.__s3_resource = kwargs['s3']
+        self.__s3_client = kwargs['s3_client']
+        self.__bucket = kwargs['bucket']
+        self.__prefix = kwargs['prefix']
+        self.__table = kwargs['table']
+
+    def add_measurement(self, identity, measurement):
+        key = identity + measurement['partogram_id']
+
+        measurement['key'] = key
+
+        self.__table.put_item(
+            Item=measurement
+        )
+
+    def list_measurement_sets(self, patient_id):
+        """
+        Gets a list of the identifiers for the measurements set (each measurement set is the data for a single
+        partograph or labor)
+        :param patient_id:
+        :return:
+        """
+        response = self.__s3_client.list_objects_v2(
+            Bucket=self.__bucket,
+            Prefix=self.__prefix + patient_id + "/"
+        )
+        partogram_identifiers_for_user = [obj['Key'] for obj in response['Contents']]
+        return json.dumps({
+            'partogram_ids': partogram_identifiers_for_user
+        })
+
+    def make_new_partogram(self, patient_id):
+        partogram_id = uuid.uuid4()
+        o = self.__s3_resource.Object(self.__bucket, self.__prefix + patient_id + "/" + partogram_id)
+        return json.dumps({
+            'partogram_id': partogram_id
+        })
 
     def get_patient(self, patient_id):
         """
