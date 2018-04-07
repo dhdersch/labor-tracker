@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { GoogleSignInComponent } from 'angular-google-signin';
 import { PatientDetailComponent } from './patient-detail/patient-detail.component';
 import { LoginComponent } from './login/login.component';
+import { LogoutComponent } from './logout/logout.component';
 
 // Services
 import { PatientService } from './patient.service';
@@ -20,7 +21,8 @@ import { AppRoutingModule } from './app-routing.module';
     AppComponent,
     GoogleSignInComponent,
     PatientDetailComponent,
-    LoginComponent
+    LoginComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

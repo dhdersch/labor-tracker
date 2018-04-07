@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private zone: NgZone, private authService: AuthService) { }
 
   private myClientId = '430167994732-22vk3tgdsdl1m74ctpqjf92p7lfk6l53.apps.googleusercontent.com';
-
+  
   onGoogleSignInSuccess(event: GoogleSignInSuccess) {
     const googleUser: gapi.auth2.GoogleUser = event.googleUser;
 
