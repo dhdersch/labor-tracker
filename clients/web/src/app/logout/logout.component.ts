@@ -17,11 +17,11 @@ export class LogoutComponent implements OnInit {
   constructor(private router: Router, private zone: NgZone, private authService: AuthService) { }
 
   ngOnInit() {
-     var auth2 = gapi.auth2.getAuthInstance();
+     const auth2 = gapi.auth2.getAuthInstance();
       auth2.signOut().then(function () {
         console.log('User signed out.');
         location.href = location.href.replace(
-          'logout', 'login')
+          'logout', 'login');
       });
   }
 

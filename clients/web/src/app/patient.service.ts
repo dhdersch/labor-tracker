@@ -60,6 +60,8 @@ export class PatientService {
       secretAccessKey: AWS.config.credentials.secretAccessKey,
       sessionToken: AWS.config.credentials.sessionToken,
     }
+
+    console.log(cfg);
     return new AWSign.AwsSigner(cfg);
   }
 

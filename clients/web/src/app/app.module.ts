@@ -15,6 +15,7 @@ import { PatientService } from './patient.service';
 import { D3Service } from 'd3-ng2-service';
 import { AuthService } from './auth.service';
 import { AppRoutingModule } from './app-routing.module';
+import { PartogramListComponent } from './partogram-list/partogram-list.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AppRoutingModule } from './app-routing.module';
     GoogleSignInComponent,
     PatientDetailComponent,
     LoginComponent,
-    LogoutComponent
+    LogoutComponent,
+    PartogramListComponent
   ],
   imports: [
     BrowserModule,

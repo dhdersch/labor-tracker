@@ -1,4 +1,10 @@
 import json
+import decimal
+
+
+def parse_partogram_id(event):
+    partogram_id = event['pathParameters']['partogram_id']
+    return partogram_id
 
 
 def parse_identity(event):
@@ -8,8 +14,15 @@ def parse_identity(event):
     return identity
 
 
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return float(o)
+        return super(DecimalEncoder, self).default(o)
+
+
 def make_response(code, body):
-    response =  {
+    response = {
         "statusCode": code,
         "headers": {
             "Access-Control-Allow-Origin": "*",
@@ -19,7 +32,7 @@ def make_response(code, body):
     }
 
     if body is not None and body != "":
-        response['body'] = json.dumps(body)
+        response['body'] = json.dumps(body, cls=DecimalEncoder)
 
     return response
 
