@@ -12,6 +12,7 @@ import { LogoutComponent } from './logout/logout.component';
 
 // Services
 import { PatientService } from './patient.service';
+import { PartogramService } from './partogram.service';
 import { D3Service } from 'd3-ng2-service';
 import { AuthService } from './auth.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -32,7 +33,7 @@ import { PartogramListComponent } from './partogram-list/partogram-list.componen
     FormsModule,
     AppRoutingModule
   ],
-  providers: [D3Service, PatientService, AuthService],
+  providers: [D3Service, PatientService, PartogramService,AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
