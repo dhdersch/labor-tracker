@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {LoginComponent} from './login/login.component';
 import {LogoutComponent} from './logout/logout.component';
 import {PatientDetailComponent} from './patient-detail/patient-detail.component';
+import {PartogramListComponent} from './partogram-list/partogram-list.component';
 import {AuthGuard} from './auth.guard';
 
 
@@ -15,6 +16,10 @@ const routes: Routes = [
     canActivate: [
       AuthGuard,
     ]
+  },
+  {
+    path: 'list-partograms',
+    component: PartogramListComponent
   },
   {
     path: 'login',
