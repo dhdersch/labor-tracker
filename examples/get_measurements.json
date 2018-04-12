@@ -1,0 +1,10 @@
+{
+  "measurements":
+  [
+    {
+    "id": "some-guid",
+    "time": 1234566,
+    "dilation": 12.1
+    }
+  ]
+}

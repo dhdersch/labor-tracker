@@ -1,5 +1,5 @@
-import { Component, OnInit,NgZone } from '@angular/core';
-import {AfterViewInit} from '@angular/core';    
+import { Component, OnInit, NgZone } from '@angular/core';
+import {AfterViewInit} from '@angular/core';
 import {PartogramService} from '../partogram.service';
 import {Partogram} from '../partogram';
 
@@ -8,18 +8,18 @@ import {Partogram} from '../partogram';
   templateUrl: './partogram-list.component.html',
   styleUrls: ['./partogram-list.component.css']
 })
-export class PartogramListComponent implements AfterViewInit {
-	partogram: Partogram = null;
-  constructor(private partogramService: PartogramService, private zone: NgZone) {}
+export class PartogramListComponent implements OnInit {
+  partograms: Partogram[] = [];
+  constructor(private partogramService: PartogramService) {}
 
-   ngAfterViewInit() {
+  ngOnInit() {
     console.log('PartogramDetailComponent - ngAfterViewInit');
     this.getPartograms();
   }
 
   getPartograms(): void {
     this.partogramService.getPartograms()
-      .subscribe(partogram => this.partogram = partogram);
+      .subscribe(partograms => this.partograms = partograms);
   }
 
 }

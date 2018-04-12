@@ -1,3 +1,3 @@
 export class Partogram {
-  id: string;
+  partogram_id: string;
 }

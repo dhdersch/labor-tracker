@@ -14,6 +14,16 @@ class PatientRepo(object):
         self.__prefix = kwargs.get('prefix')
         self.__table = kwargs.get('table')
 
+    def __make_measurement_output(self, identity, partogram_id, measurement):
+
+        key = measurement.get('key')
+        identifier = key.replace(identity, "")
+        return {
+            'id': identifier,
+            'dilation': measurement.get('dilation'),
+            'time': measurement.get('time')
+        }
+
     def get_measurements(self, identity, partogram_id):
 
         hash_key = identity + partogram_id
@@ -24,7 +34,10 @@ class PatientRepo(object):
             'KeyConditionExpression': Key("key").eq(hash_key)
         }
 
-        return self.__table.query(**kwargs)['Items']
+        items = self.__table.query(**kwargs)['Items']
+        items = [self.__make_measurement_output(identity, partogram_id, item) for item in items]
+
+        return items
 
     def add_measurement(self, identity, partogram_id, measurement):
         key = identity + partogram_id
@@ -54,9 +67,10 @@ class PatientRepo(object):
         if "" in identifiers:
             identifiers.remove("")
 
+        result = [{"partogram_id": identifier} for identifier in list(identifiers)]
 
         return {
-            'partogram_ids': list(identifiers)
+            'partograms': result
         }
 
     def make_new_partogram(self, patient_id):

@@ -9,6 +9,8 @@ import { Partogram } from './partogram';
 import * as AWSign from 'aws-sign-web';
 import * as AWS from 'aws-sdk';
 import {AuthService} from './auth.service';
+import {Part} from 'aws-sdk/clients/s3';
+import {Measurement} from './measurement';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -22,8 +24,6 @@ export class PartogramService {
   constructor(
     private http: HttpClient, private authService: AuthService) {
   }
-
-
   signer(): AWSign.AwsSigner {
     const cfg = {
       region: 'us-east-1',
@@ -31,7 +31,7 @@ export class PartogramService {
       accessKeyId: AWS.config.credentials.accessKeyId,
       secretAccessKey: AWS.config.credentials.secretAccessKey,
       sessionToken: AWS.config.credentials.sessionToken,
-    }
+    };
 
     console.log(cfg);
     return new AWSign.AwsSigner(cfg);
@@ -39,7 +39,64 @@ export class PartogramService {
 
 
 
-  getPartograms(): Observable<Partogram> {
+  addMeasurement(partogram_id: string, dilation: number, time: number) {
+
+    console.log('add partogram measurement for', partogram_id, dilation, time);
+
+    const url = `${this.partogramURL}/${partogram_id}/measurements`;
+    const signer = this.signer();
+
+    const measurement = new Measurement();
+    measurement.dilation = dilation;
+    measurement.time = time;
+
+    const request = {
+      method: 'POST',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: measurement,
+    };
+
+    const signed = signer.sign(request);
+
+    const options = {
+      headers: new HttpHeaders(signed)
+    };
+    return this.http.post<Measurement>(url, measurement, options);
+
+  }
+  getMeasurements(partogram_id: string): Observable<Measurement[]> {
+    const url = `${this.partogramURL}/${partogram_id}/measurements`;
+    const signer = this.signer();
+    const request = {
+      method: 'GET',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: null
+    };
+
+    const signed = signer.sign(request);
+
+    const options = {
+      headers: new HttpHeaders(signed)
+    };
+
+    return this.http.get(url, options).pipe(
+      tap(s => {
+        console.log(s);
+      }),
+      map(response => {
+        return response['measurements'];
+      })
+    );
+  }
+
+
+  getPartograms(): Observable<Partogram[]> {
     const url = `${this.partogramURL}`;
     const signer = this.signer();
     const request = {
@@ -57,21 +114,30 @@ export class PartogramService {
       headers: new HttpHeaders(signed)
     };
 
-    return this.http.get<Partogram>(url, options).pipe(
-      tap(_ => console.log(`fetched partograms`)),
-      catchError(this.handleNotFound())
+    return this.http.get(url, options).pipe(
+      tap(s => {
+        console.log(s);
+      }),
+      map(response => {
+        return response['partograms'];
+      })
     );
+
   }
 
 
   private handleNotFound () {
-    return (error: any): Observable<Partogram> => {
+    return (error: any): Observable<Array<Partogram>> => {
 
       console.error(error);
 
-      console.log('Return empty partogram')
-      const partogram = new Partogram();
-      return of(partogram);
+      console.log('Return empty partogram');
+
+      const partograms: Array<Partogram> = [];
+
+      return of(partograms);
+
+
 
 
     };

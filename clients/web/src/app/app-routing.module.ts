@@ -7,6 +7,7 @@ import {LogoutComponent} from './logout/logout.component';
 import {PatientDetailComponent} from './patient-detail/patient-detail.component';
 import {PartogramListComponent} from './partogram-list/partogram-list.component';
 import {AuthGuard} from './auth.guard';
+import {PartogramComponent} from './partogram/partogram.component';
 
 
 const routes: Routes = [
@@ -19,7 +20,10 @@ const routes: Routes = [
   },
   {
     path: 'list-partograms',
-    component: PartogramListComponent
+    component: PartogramListComponent,
+    canActivate: [
+      AuthGuard,
+    ],
   },
   {
     path: 'login',
@@ -28,6 +32,13 @@ const routes: Routes = [
   {
     path: 'logout',
     component: LogoutComponent
+  },
+  {
+    path: 'partograms/:partogram_id',
+    component: PartogramComponent,
+    canActivate: [
+      AuthGuard,
+    ],
   },
   {
     path: '',

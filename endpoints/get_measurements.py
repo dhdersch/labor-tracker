@@ -24,6 +24,7 @@ def handler(event, context):
     except ClientError as e:
         return handle_client_error(e)
 
+
     return make_response(200, {
         'measurements': measurements
     })

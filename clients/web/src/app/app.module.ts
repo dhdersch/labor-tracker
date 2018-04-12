@@ -17,6 +17,7 @@ import { D3Service } from 'd3-ng2-service';
 import { AuthService } from './auth.service';
 import { AppRoutingModule } from './app-routing.module';
 import { PartogramListComponent } from './partogram-list/partogram-list.component';
+import {PartogramComponent} from './partogram/partogram.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { PartogramListComponent } from './partogram-list/partogram-list.componen
     PatientDetailComponent,
     LoginComponent,
     LogoutComponent,
-    PartogramListComponent
+    PartogramListComponent,
+    PartogramComponent,
   ],
   imports: [
     BrowserModule,

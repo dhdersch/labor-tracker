@@ -2,28 +2,32 @@
 
 
 <h2>Partogram</h2>
-<!--<div class="row col-md-12">-->
-    <!--<div class="form-group col-md-4">-->
-        <!--<label class="col-form-label col-form-label-sm" for="inputSmall">Dilation</label>-->
-        <!--<select class="form-control" [(ngModel)]="currentDilation" name="currentDilation">-->
-            <!--<option *ngFor="let dilation of patientService.remainingDilations; let i = index;" [ngValue]="dilation" selected="{{i == 0 ? 'selected' : ''}}">-->
-                <!--{{dilation}}-->
-            <!--</option>-->
-        <!--</select>-->
-    <!--</div>-->
-    <!--<div class="form-group col-md-4">-->
-        <!--<label class="col-form-label col-form-label-sm" for="inputSmall">Duration</label>-->
-        <!--<select class="form-control" [(ngModel)]="currentDuration" name="currentDuration">-->
-            <!--<option *ngFor="let duration of patientService.remainingDurations; let i = index;" [ngValue]="duration" selected="{{i == 0 ? 'selected' : ''}}">-->
-                <!--{{duration}}-->
-            <!--</option>-->
-        <!--</select>-->
-    <!--</div>-->
-    <!--<div class="form-group col-md-4">-->
-        <!--<button class="btn btn-secondary pt-1 my-2 my-md-0 bottom-left" (click)="onNewDilationClick()">-->
-            <!--<span class="glyphicon glyphicon-plus">Add Dilation Point</span> -->
-        <!--</button>-->
-    <!--</div>-->
-    <!---->
-<!--</div>-->
-<!--<div class="row"><svg /></div>-->
+
+
+<div *ngFor="let m of measurements">
+  <div>ID</div>
+  <div>{{m.id}}</div>
+  <div>Dilation</div>
+  <div>{{m.dilation}}</div>
+  <div>Time</div>
+  <div>{{m.time}}</div>
+</div>
+
+
+
+<div>
+  <h3>Add Measurement</h3>
+  <div>
+    <label>time: {{newMeasurement.time}}
+    <input [(ngModel)]="newMeasurement.time" placeholder="Time" >
+    </label>
+
+  </div>
+  <div>
+    <label>Dilation:
+      <input [(ngModel)]="newMeasurement.dilation" placeholder="Dilation" >
+    </label>
+
+  </div>
+  <button (click)="addNewMeasurement()">Add Measurement!</button>
+</div>
