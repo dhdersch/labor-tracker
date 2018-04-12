@@ -63,6 +63,15 @@ functions:
         cors: true
         authorizer: aws_iam
 
+  delete_measurement:
+    handler: endpoints/delete_measurement.handler
+    events:
+    - http:
+        path: partograms/{partogram_id}/measurements/{time}
+        method: delete
+        cors: true
+        authorizer: aws_iam
+
   post_measurement:
     handler: endpoints/post_measurement.handler
     events:

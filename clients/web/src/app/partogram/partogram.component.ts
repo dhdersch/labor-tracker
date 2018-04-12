@@ -43,4 +43,13 @@ export class PartogramComponent implements OnInit {
     );
   }
 
+  removeMeasurement(measurementTime: number): void {
+    const sub = this.partogramService.deleteMeasurement(this.partogram_id, measurementTime)
+      .subscribe(r => {
+          this.getMeasurements();
+          sub.unsubscribe();
+        }
+      );
+  }
+
 }

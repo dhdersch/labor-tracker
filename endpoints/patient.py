@@ -24,6 +24,21 @@ class PatientRepo(object):
             'time': measurement.get('time')
         }
 
+    def delete_measurement(self, identity, partogram_id, time):
+        hash_key = identity + partogram_id
+        range_key = time
+
+        kwargs= {
+            'Key': {
+                "key": hash_key,
+                "time": int(range_key)
+            }
+
+        }
+
+        self.__table.delete_item(**kwargs)
+
+
     def get_measurements(self, identity, partogram_id):
 
         hash_key = identity + partogram_id

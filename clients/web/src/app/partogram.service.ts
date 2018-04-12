@@ -38,6 +38,24 @@ export class PartogramService {
   }
 
 
+  deleteMeasurement(partogram_id: string, time: number) {
+    const url = `${this.partogramURL}/${partogram_id}/measurements/${time}`;
+    const signer = this.signer();
+
+    const request = {
+      method: 'DELETE',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const signed = signer.sign(request);
+    const options = {
+      headers: new HttpHeaders(signed)
+    };
+    return this.http.delete<Measurement>(url, options);
+  }
 
   addMeasurement(partogram_id: string, dilation: number, time: number) {
 

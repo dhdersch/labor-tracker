@@ -7,6 +7,11 @@ def parse_partogram_id(event):
     return partogram_id
 
 
+def parse_time(event):
+    time = event['pathParameters']['time']
+    return time
+
+
 def parse_identity(event):
     provider = event["requestContext"]["identity"]["cognitoAuthenticationProvider"]
     identity = provider[provider.rfind(":") + 1:]
