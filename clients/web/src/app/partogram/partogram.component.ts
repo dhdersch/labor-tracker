@@ -41,12 +41,45 @@ export class PartogramComponent implements OnInit {
       this.measurements = measurements;
       this.render(this.measurements);
     });
-
-
   }
+
+
+  validateDilation(dilation: number)  {
+    console.log("Validating dilation "+dilation)
+    if (dilation > 11 || dilation < 0) {
+        return "Dilation must be a number between 0 and 11"
+     }
+     if (dilation == undefined || dilation == null){
+       return "A dilation value between 0 and 11 must be provided"
+     }
+    return null
+  } 
+
+  //A valid unix timestamp should be 10 digits long & only contain digits
+  validateTime(time: number)  {
+    console.log("Validating time "+time)
+    if (time.toString().length != 10 || !/^\d+$/.test(time.toString())){
+      return "A valid time in Unix format must be provided"
+    }
+    return null
+  } 
 
   addNewMeasurement(): void {
     console.log(this.newMeasurement);
+
+    const dilationValidationMessage = this.validateDilation(this.newMeasurement.dilation)
+    if (dilationValidationMessage != null) {
+      window.alert(dilationValidationMessage);
+       return
+    }
+    const timeValidationMessage = this.validateTime(this.newMeasurement.time)
+    if (timeValidationMessage != null) {
+      window.alert(timeValidationMessage);
+       return
+    }
+
+    
+
     const sub = this.partogramService.addMeasurement(this.partogram_id, +this.newMeasurement.dilation, +this.newMeasurement.time)
       .subscribe(r => {
         this.getMeasurements();

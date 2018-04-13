@@ -106,7 +106,6 @@ export class PartogramService {
   }
 
   addMeasurement(partogram_id: string, dilation: number, time: number) {
-
     console.log('add partogram measurement for', partogram_id, dilation, time);
 
     const url = `${this.partogramURL}/${partogram_id}/measurements`;
