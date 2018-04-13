@@ -35,7 +35,7 @@ import {PartogramComponent} from './partogram/partogram.component';
     FormsModule,
     AppRoutingModule
   ],
-  providers: [D3Service, PatientService, PartogramService,AuthService],
+  providers: [D3Service, PatientService, PartogramService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

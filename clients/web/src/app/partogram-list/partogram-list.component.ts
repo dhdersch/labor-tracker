@@ -22,4 +22,17 @@ export class PartogramListComponent implements OnInit {
       .subscribe(partograms => this.partograms = partograms);
   }
 
+  addNewPartogram(): void {
+    this.partogramService.addPartogram().subscribe(partogram => {
+      console.log('Created new partogram', partogram);
+      this.getPartograms();
+    });
+  }
+
+  removePartogram(partogram_id: string): void {
+    this.partogramService.deletePartogram(partogram_id).subscribe(r => {
+      console.log('removed partogram');
+      this.getPartograms();
+    });
+  }
 }

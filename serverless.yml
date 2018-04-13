@@ -45,6 +45,15 @@ package:
     - venv/**
 
 functions:
+  delete_partogram:
+    handler: endpoints/delete_partogram.handler
+    events:
+    - http:
+        path: partograms/{partogram_id}
+        method: delete
+        cors: true
+        authorizer: aws_iam
+
   post_partogram:
     handler: endpoints/post_partogram.handler
     events:

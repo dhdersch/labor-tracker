@@ -38,6 +38,57 @@ export class PartogramService {
   }
 
 
+  deletePartogram(partogram_id: string): Observable<void> {
+    const url = `${this.partogramURL}/${partogram_id}`;
+    const signer = this.signer();
+
+    // const p: Partogram = {
+    //   partogram_id: partogram_id
+    // }
+
+    const request = {
+      method: 'DELETE',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const signed = signer.sign(request);
+    const options = {
+      headers: new HttpHeaders(signed)
+    };
+
+    return this.http.delete<void>(url, options);
+  }
+
+
+  addPartogram(): Observable<Partogram> {
+    const url = `${this.partogramURL}`;
+    const signer = this.signer();
+
+    const p: Partogram = {
+      partogram_id: 'fake'
+    }
+
+    const request = {
+      method: 'POST',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: p,
+    };
+
+    const signed = signer.sign(request);
+    const options = {
+      headers: new HttpHeaders(signed)
+    };
+
+    return this.http.post<Partogram>(url, p, options);
+  }
+
+
   deleteMeasurement(partogram_id: string, time: number) {
     const url = `${this.partogramURL}/${partogram_id}/measurements/${time}`;
     const signer = this.signer();

@@ -4,6 +4,9 @@ import uuid
 
 from boto3.dynamodb.conditions import Key
 
+import time as ptime
+import decimal
+
 
 class PatientRepo(object):
 
@@ -14,7 +17,28 @@ class PatientRepo(object):
         self.__prefix = kwargs.get('prefix')
         self.__table = kwargs.get('table')
 
-    def __make_measurement_output(self, identity, partogram_id, measurement):
+
+    def delete_partogram(self, identity, partogram_id):
+        db_hash_key = identity + partogram_id
+
+        measurements = self.get_measurements(identity, partogram_id)
+
+        for m in measurements:
+            kwargs = {
+                'Key':{
+                    'key': db_hash_key,
+                    'time': m['time']
+                }
+            }
+            self.__table.delete_item(**kwargs)
+
+        o = self.__s3_resource.Object(self.__bucket, self.__prefix + identity + "/" + str(partogram_id))
+        o.delete()
+        ptime.sleep(0.2)
+
+
+    @staticmethod
+    def __make_measurement_output(identity, partogram_id, measurement):
 
         key = measurement.get('key')
         identifier = key.replace(identity, "")
@@ -38,7 +62,6 @@ class PatientRepo(object):
 
         self.__table.delete_item(**kwargs)
 
-
     def get_measurements(self, identity, partogram_id):
 
         hash_key = identity + partogram_id
@@ -57,6 +80,7 @@ class PatientRepo(object):
     def add_measurement(self, identity, partogram_id, measurement):
         key = identity + partogram_id
         measurement['key'] = key
+        measurement['dilation'] = decimal.Decimal(str(measurement['dilation']))
         self.__table.put_item(
             Item=measurement
         )
@@ -139,4 +163,4 @@ class PatientRepo(object):
 def remove_prefix(text, prefix):
     if text.startswith(prefix):
         return text[len(prefix):]
-    return text  # or whatever
+    return text

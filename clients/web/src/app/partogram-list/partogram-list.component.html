@@ -1,14 +1,15 @@
-<div align="center">
-	<nav>
-	  <a routerLink="/patient">Patient</a>
-	  <a routerLink="/logout">Log Out</a>
-	</nav>
-	<div class="partogram-list">
-    <li *ngFor="let partogram of partograms; let i = index">
+<div class="partogram-list">
+<li *ngFor="let partogram of partograms; let i = index">
 
-      <a [routerLink]="['/partograms', partogram.partogram_id]">
-        Partogram {{i + 1}}
-      </a>
-    </li>
-	</div>
+  <a [routerLink]="['/partograms', partogram.partogram_id]">
+    Partogram {{i + 1}}
+  </a>
+
+  <button (click)="removePartogram(partogram.partogram_id)">Delete partogram</button>
+</li>
+
+
 </div>
+
+
+<button (click)="addNewPartogram()">Add new partogram</button>
