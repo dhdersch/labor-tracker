@@ -66,36 +66,28 @@ export class PartogramComponent implements OnInit {
   }
 
   render(measurements: Measurement[]): void {
+    console.log(measurements);
+    if (measurements.length < 2) {
+      console.log('There should be at least 2 measurements before rendering the partogram!')
+      return;
+    }
     console.log('Rendering');
     const d3 = this.d3;
     const svg = d3.select('svg');
-    svg.selectAll('*').remove();
 
-    // const secondsInHour = 60 * 60;
-    // const startTime = 1522584000; // Sunday, 01-Apr-18 12:00:00 UTC
-    // const measurements: Measurement[] = [
-    //   new Measurement(startTime + (secondsInHour * 6), 5.0),
-    //   new Measurement(startTime, 3.0),
-    //   new Measurement(startTime + (secondsInHour * 2), 3.0),
-    //   new Measurement(startTime + (secondsInHour * 3), 4.0),
-    //   new Measurement(startTime + (secondsInHour * 5), 4.5),
-    //   new Measurement(startTime + (secondsInHour * 7), 6.0),
-    //   new Measurement(startTime + (secondsInHour * 4), 4.0),
-    // ];
-
-    console.log(measurements);
 
     const margin = {top: 20, right: 20, bottom: 30, left: 50};
     const width = 600 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
 
+    svg.selectAll('*').remove();
     /* Add SVG */
     svg.attr('width', `${width}px`)
       .attr('height', `${height}px`)
       .append('g')
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-
+    // Convert measurements to a format that d3 understands! (the dates)
     const transformedMeasurements: MeasurementData[] = [];
     for (const measurement of measurements) {
       const m: MeasurementData = new MeasurementData();
@@ -112,12 +104,8 @@ export class PartogramComponent implements OnInit {
     const maxMeasurement = transformedMeasurements[transformedMeasurements.length - 1];
 
     const timeScale = d3.scaleTime().domain([minMeasurement.time, maxMeasurement.time]).range([0, width - margin.left]);
-
     const dilationScale = d3.scaleLinear().domain([minMeasurement.dilation, maxMeasurement.dilation]).range([height - margin.top, 0]);
-
-
     const xAxis = d3.axisBottom(timeScale).tickFormat(d3.timeFormat('%H %M'));
-
     const yAxis = d3.axisLeft(dilationScale).ticks(10);
 
     console.log(timeScale);

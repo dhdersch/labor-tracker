@@ -25,6 +25,8 @@ export class PartogramService {
     private http: HttpClient, private authService: AuthService) {
   }
   signer(): AWSign.AwsSigner {
+
+    this.authService.refreshAWSCredentials();
     const cfg = {
       region: 'us-east-1',
       service: 'execute-api',
@@ -41,11 +43,6 @@ export class PartogramService {
   deletePartogram(partogram_id: string): Observable<void> {
     const url = `${this.partogramURL}/${partogram_id}`;
     const signer = this.signer();
-
-    // const p: Partogram = {
-    //   partogram_id: partogram_id
-    // }
-
     const request = {
       method: 'DELETE',
       url: url,

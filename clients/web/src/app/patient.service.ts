@@ -22,9 +22,6 @@ export class PatientService {
   constructor(
     private http: HttpClient, private authService: AuthService) {
   }
-
-
-
   updatePatient(patient: Patient): Observable<Patient> {
 
     const url = `${this.patientUrl}/update`;
@@ -53,6 +50,7 @@ export class PatientService {
 
 
   signer(): AWSign.AwsSigner {
+    this.authService.refreshAWSCredentials();
     const cfg = {
       region: 'us-east-1',
       service: 'execute-api',

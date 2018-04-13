@@ -17,11 +17,16 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private zone: NgZone, private authService: AuthService) { }
 
   private myClientId = '430167994732-22vk3tgdsdl1m74ctpqjf92p7lfk6l53.apps.googleusercontent.com';
-  
+
   onGoogleSignInSuccess(event: GoogleSignInSuccess) {
     const googleUser: gapi.auth2.GoogleUser = event.googleUser;
 
     const authResponse: AuthResponse = googleUser.getAuthResponse();
+
+    const profile = googleUser.getBasicProfile();
+    console.log('Google ID', profile.getId());
+    console.log('Google Email', profile.getEmail());
+    console.log('Google Name', profile.getName());
 
     localStorage.setItem('google_expires_at', authResponse.expires_at);
     localStorage.setItem('google_id_token', authResponse.id_token);
