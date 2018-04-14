@@ -105,7 +105,7 @@ export class PartogramComponent implements OnInit {
 
     const timeScale = d3.scaleTime().domain([minMeasurement.time, maxMeasurement.time]).range([0, width - margin.left]);
     const dilationScale = d3.scaleLinear().domain([minMeasurement.dilation, maxMeasurement.dilation]).range([height - margin.top, 0]);
-    const xAxis = d3.axisBottom(timeScale).tickFormat(d3.timeFormat('%H %M'));
+    const xAxis = d3.axisBottom(timeScale).tickFormat(d3.timeFormat('%H:%M'));
     const yAxis = d3.axisLeft(dilationScale).ticks(10);
 
     console.log(timeScale);
