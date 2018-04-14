@@ -1,6 +1,6 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
-
+import * as downloader from 'save-svg-as-png';
 
 import {PartogramService} from '../partogram.service';
 import {Measurement, MeasurementData} from '../measurement';
@@ -41,13 +41,50 @@ export class PartogramComponent implements OnInit {
       this.measurements = measurements;
       this.render(this.measurements);
     });
+  }
 
 
+  validateDilation(dilation: number)  {
+    console.log("Validating dilation "+dilation)
+    if (dilation > 11 || dilation < 0) {
+        return "Dilation must be a number between 0 and 11"
+     }
+     if (dilation == undefined || dilation == null){
+       return "A dilation value between 0 and 11 must be provided"
+     }
+    return null
+  } 
+
+  //A valid unix timestamp should be 10 digits long & only contain digits
+  validateTime(time: Date)  {
+    console.log("Validating time "+time)
+    if (time.toString().length < 1){
+      return "A valid time must be selected"
+    }
+    return null
+  } 
+
+  saveSvg(): void {
+    downloader.saveSvgAsPng(document.getElementsByTagName("svg")[0], "partogram.png",{height:document.getElementsByTagName("svg")[0].height.baseVal.value+100});
   }
 
   addNewMeasurement(): void {
     console.log(this.newMeasurement);
-    const sub = this.partogramService.addMeasurement(this.partogram_id, +this.newMeasurement.dilation, +this.newMeasurement.time)
+
+    const dilationValidationMessage = this.validateDilation(this.newMeasurement.dilation)
+    if (dilationValidationMessage != null) {
+      window.alert(dilationValidationMessage);
+       return
+    }
+    const timeValidationMessage = this.validateTime(this.newMeasurement.time)
+    if (timeValidationMessage != null) {
+      window.alert(timeValidationMessage);
+       return
+    }
+
+    
+
+    const sub = this.partogramService.addMeasurement(this.partogram_id, +this.newMeasurement.dilation, this.newMeasurement.time)
       .subscribe(r => {
         this.getMeasurements();
         this.newMeasurement = new Measurement();
@@ -91,7 +128,7 @@ export class PartogramComponent implements OnInit {
     const transformedMeasurements: MeasurementData[] = [];
     for (const measurement of measurements) {
       const m: MeasurementData = new MeasurementData();
-      m.time = new Date(measurement.time * 1000);
+      m.time = measurement.time;
       m.dilation = measurement.dilation;
       transformedMeasurements.push(m);
     }

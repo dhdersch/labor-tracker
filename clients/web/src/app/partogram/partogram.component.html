@@ -17,9 +17,9 @@
 <div>
   <h3>Add Measurement</h3>
   <div>
-    <label>time:
-    <input [(ngModel)]="newMeasurement.time" placeholder="Time" >
-    </label>
+    <p>time:
+    </p>
+    <owl-date-time-inline [(ngModel)]="newMeasurement.time"></owl-date-time-inline>
 
   </div>
   <div>
@@ -35,3 +35,4 @@
 <div>
   <svg />
 </div>
+ <button (click)="saveSvg()">Download Partogram</button>

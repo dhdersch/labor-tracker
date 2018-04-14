@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Components
 import { AppComponent } from './app.component';
@@ -9,6 +10,8 @@ import { GoogleSignInComponent } from 'angular-google-signin';
 import { PatientDetailComponent } from './patient-detail/patient-detail.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+
 
 // Services
 import { PatientService } from './patient.service';
@@ -31,9 +34,12 @@ import {PartogramComponent} from './partogram/partogram.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
   ],
   providers: [D3Service, PatientService, PartogramService, AuthService],
   bootstrap: [AppComponent]
