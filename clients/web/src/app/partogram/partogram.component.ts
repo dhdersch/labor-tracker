@@ -56,10 +56,10 @@ export class PartogramComponent implements OnInit {
   } 
 
   //A valid unix timestamp should be 10 digits long & only contain digits
-  validateTime(time: number)  {
+  validateTime(time: Date)  {
     console.log("Validating time "+time)
-    if (time.toString().length != 10 || !/^\d+$/.test(time.toString())){
-      return "A valid time in Unix format must be provided"
+    if (time.toString().length < 1){
+      return "A valid time must be selected"
     }
     return null
   } 
@@ -84,7 +84,7 @@ export class PartogramComponent implements OnInit {
 
     
 
-    const sub = this.partogramService.addMeasurement(this.partogram_id, +this.newMeasurement.dilation, +this.newMeasurement.time)
+    const sub = this.partogramService.addMeasurement(this.partogram_id, +this.newMeasurement.dilation, this.newMeasurement.time)
       .subscribe(r => {
         this.getMeasurements();
         this.newMeasurement = new Measurement();
@@ -128,7 +128,7 @@ export class PartogramComponent implements OnInit {
     const transformedMeasurements: MeasurementData[] = [];
     for (const measurement of measurements) {
       const m: MeasurementData = new MeasurementData();
-      m.time = new Date(measurement.time * 1000);
+      m.time = measurement.time;
       m.dilation = measurement.dilation;
       transformedMeasurements.push(m);
     }

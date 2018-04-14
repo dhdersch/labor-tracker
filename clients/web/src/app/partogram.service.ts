@@ -10,7 +10,7 @@ import * as AWSign from 'aws-sign-web';
 import * as AWS from 'aws-sdk';
 import {AuthService} from './auth.service';
 import {Part} from 'aws-sdk/clients/s3';
-import {Measurement} from './measurement';
+import {Measurement, MeasurementBackend} from './measurement';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -105,15 +105,15 @@ export class PartogramService {
     return this.http.delete<Measurement>(url, options);
   }
 
-  addMeasurement(partogram_id: string, dilation: number, time: number) {
+  addMeasurement(partogram_id: string, dilation: number, time: Date) {
     console.log('add partogram measurement for', partogram_id, dilation, time);
 
     const url = `${this.partogramURL}/${partogram_id}/measurements`;
     const signer = this.signer();
 
-    const measurement = new Measurement();
+    const measurement = new MeasurementBackend();
     measurement.dilation = dilation;
-    measurement.time = time;
+    measurement.time = parseInt((time.getTime() / 1000).toFixed(0));
 
     const request = {
       method: 'POST',
