@@ -1,6 +1,6 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
-import * as dl from 'save-svg-as-png';
+import * as downloader from 'save-svg-as-png';
 
 import {PartogramService} from '../partogram.service';
 import {Measurement, MeasurementData} from '../measurement';
@@ -65,7 +65,7 @@ export class PartogramComponent implements OnInit {
   } 
 
   saveSvg(): void {
-    dl.saveSvgAsPng(document.getElementsByTagName("svg")[0], "partogram.png",{height:document.getElementsByTagName("svg")[0].height.baseVal.value+100});
+    downloader.saveSvgAsPng(document.getElementsByTagName("svg")[0], "partogram.png",{height:document.getElementsByTagName("svg")[0].height.baseVal.value+100});
   }
 
   addNewMeasurement(): void {
