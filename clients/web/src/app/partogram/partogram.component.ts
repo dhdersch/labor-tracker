@@ -153,11 +153,19 @@ export class PartogramComponent implements OnInit {
 
     console.log(measurements);
 
-    const minMeasurement = measurements[0];
-    const maxMeasurement = measurements[measurements.length - 1];
+    const minMeasurementTime = measurements[0].time
+    const minMeasurementDilation = Math.min(...measurements.map(o => o.dilation));
+    const maxMeasurementTime = measurements[measurements.length - 1].time
+    const maxMeasurementDilation = Math.max(...measurements.map(o => o.dilation));
 
-    const timeScale = d3.scaleTime().domain([minMeasurement.time, maxMeasurement.time]).range([0, width - margin.left]);
-    const dilationScale = d3.scaleLinear().domain([minMeasurement.dilation, maxMeasurement.dilation]).range([height - margin.top, 0]);
+    const timeScale = d3.scaleTime().domain([minMeasurementTime, maxMeasurementTime]).range([0, width - margin.left]);
+    const dilationScale = d3.scaleLinear().domain([minMeasurementDilation, maxMeasurementDilation]).range([height - margin.top, 0]);
+    const time_range = (maxMeasurementTime.getTime() - minMeasurementTime.getTime())
+    let time_width = {}
+    for (let i = 1; i < measurements.length; i++) {
+      time_width[measurements[i-1].time.getTime()] = ((measurements[i].time.getTime() - measurements[i-1].time.getTime()) / time_range) * width
+    }
+    time_width[maxMeasurementTime.getTime()] = width
     const xAxis = d3.axisBottom(timeScale).tickFormat(d3.timeFormat('%H:%M'));
     const yAxis = d3.axisLeft(dilationScale).ticks(10);
 
@@ -186,7 +194,7 @@ export class PartogramComponent implements OnInit {
       .enter().append('rect')
       .style('fill', 'steelblue')
       .attr('x', function(d) { return timeScale(d.time); })
-      .attr('width', width)
+      .attr('width', function(d) { return time_width[d.time.getTime()]; })
       .attr('y', function(d) { return dilationScale(d.dilation); })
       .attr('height', function(d) { return height - dilationScale(d.dilation); });
 
