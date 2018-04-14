@@ -65,7 +65,7 @@ export class PartogramComponent implements OnInit {
   } 
 
   saveSvg(): void {
-    dl.saveSvgAsPng(document.getElementsByTagName("svg")[0], "partogram.png");
+    dl.saveSvgAsPng(document.getElementsByTagName("svg")[0], "partogram.png",{height:document.getElementsByTagName("svg")[0].height.baseVal.value+100});
   }
 
   addNewMeasurement(): void {
