@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
 
     localStorage.setItem('google_expires_at', authResponse.expires_at);
     localStorage.setItem('google_id_token', authResponse.id_token);
+    localStorage.setItem('google_name', profile.getName());
 
     const r_var = new AWS.CognitoIdentityCredentials({
       IdentityPoolId: 'us-east-1:5e49b927-e94b-48b6-b0ad-a1f9b2a26eb0', // your identity pool id here

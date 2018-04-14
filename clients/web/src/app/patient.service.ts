@@ -119,6 +119,10 @@ export class PatientService {
 
       console.log('Patient does not exist yet, so let them create it.')
       const patient = new Patient();
+      if(localStorage.getItem('google_name')){
+        let initials = (localStorage.getItem('google_name').match(/\b\w/g) || []);
+        patient.initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+      }
       return of(patient);
 
 
