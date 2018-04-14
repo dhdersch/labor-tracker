@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewEncapsulation,Inject } from '@angular/core';
 
 import * as downloader from 'save-svg-as-png';
 
@@ -8,11 +8,17 @@ import {ActivatedRoute} from '@angular/router';
 import { D3Service, D3, Selection} from 'd3-ng2-service';
 import {PatientService} from '../patient.service';
 import {Patient} from '../patient';
+import {AddMeasurementComponent} from '../add-measurement/add-measurement.component';
+
+import {MatDialog, MatDialogConfig} from "@angular/material";
 
 @Component({
   selector: 'app-partogram',
   templateUrl: './partogram.component.html',
   styleUrls: ['./partogram.component.css'],
+  entryComponents: [
+    AddMeasurementComponent
+  ]
 })
 
 export class PartogramComponent implements OnInit {
@@ -24,13 +30,28 @@ export class PartogramComponent implements OnInit {
 
   partogram_id: string;
   measurements: Measurement[];
-  newMeasurement: Measurement = new Measurement();
-  constructor(private partogramService: PartogramService, private route: ActivatedRoute, element: ElementRef, d3Service: D3Service,
-              private patientService: PatientService) {
+  constructor(private partogramService: PartogramService,
+              private route: ActivatedRoute,
+              private element: ElementRef,
+              private d3Service: D3Service,
+              private patientService: PatientService,
+              private dialog: MatDialog) {
     this.d3 = d3Service.getD3();
     this.parentNativeElement = element.nativeElement;
   }
 
+  openAddMeasurementDialog() {
+    const dialogRef = this.dialog.open(AddMeasurementComponent, {
+      height: '400px',
+      width: '600px',
+      data: {
+        partogram_id: this.partogram_id,
+      }
+    }).afterClosed().subscribe(() =>
+      this.getMeasurements()
+    );
+
+  }
 
   getPatientDetails() {
     this.patientService.getPatient().subscribe(patient => {
@@ -58,25 +79,7 @@ export class PartogramComponent implements OnInit {
   }
 
 
-  validateDilation(dilation: number)  {
-    console.log('Validating dilation ' + dilation);
-    if (dilation > 11 || dilation < 0) {
-        return 'Dilation must be a number between 0 and 11';
-     }
-     if (dilation === undefined || dilation == null){
-       return 'A dilation value between 0 and 11 must be provided';
-     }
-    return null;
-  }
 
-  // A valid unix timestamp should be 10 digits long & only contain digits
-  validateTime(time: Date)  {
-    console.log('Validating time ' + time);
-    if (time.toString().length < 1) {
-      return 'A valid time must be selected';
-    }
-    return null;
-  }
 
   saveSvg(): void {
     downloader.saveSvgAsPng(document.getElementsByTagName('svg')[0], 'partogram.png', {
@@ -84,28 +87,6 @@ export class PartogramComponent implements OnInit {
       });
   }
 
-  addNewMeasurement(): void {
-    console.log(this.newMeasurement);
-
-    const dilationValidationMessage = this.validateDilation(this.newMeasurement.dilation);
-    if (dilationValidationMessage != null) {
-      window.alert(dilationValidationMessage);
-       return;
-    }
-    const timeValidationMessage = this.validateTime(this.newMeasurement.time);
-    if (timeValidationMessage != null) {
-      window.alert(timeValidationMessage);
-       return;
-    }
-
-    const sub = this.partogramService.addMeasurement(this.partogram_id, +this.newMeasurement.dilation, this.newMeasurement.time)
-      .subscribe(r => {
-        this.getMeasurements();
-        this.newMeasurement = new Measurement();
-        sub.unsubscribe();
-      }
-    );
-  }
 
   removeMeasurement(measurementTime: number): void {
     const sub = this.partogramService.deleteMeasurement(this.partogram_id, measurementTime)
@@ -132,20 +113,10 @@ export class PartogramComponent implements OnInit {
     const height = 300 - margin.top - margin.bottom;
 
     svg.selectAll('*').remove();
-    /* Add SVG */
     svg.attr('width', `${width}px`)
       .attr('height', `${height}px`)
       .append('g')
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-    // Convert measurements to a format that d3 understands! (the dates)
-    // const transformedMeasurements: MeasurementData[] = [];
-    // for (const measurement of measurements) {
-    //   const m: MeasurementData = new MeasurementData();
-    //   m.time = measurement.time;
-    //   m.dilation = measurement.dilation;
-    //   transformedMeasurements.push(m);
-    // }
 
     console.log('measurements sort', measurements);
 

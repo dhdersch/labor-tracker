@@ -11,9 +11,6 @@ import { PatientDetailComponent } from './patient-detail/patient-detail.componen
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-
-
-// Services
 import { PatientService } from './patient.service';
 import { PartogramService } from './partogram.service';
 import { D3Service } from 'd3-ng2-service';
@@ -21,6 +18,8 @@ import { AuthService } from './auth.service';
 import { AppRoutingModule } from './app-routing.module';
 import { PartogramListComponent } from './partogram-list/partogram-list.component';
 import {PartogramComponent} from './partogram/partogram.component';
+import { AddMeasurementComponent } from './add-measurement/add-measurement.component';
+import {MatDialogModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -31,6 +30,7 @@ import {PartogramComponent} from './partogram/partogram.component';
     LogoutComponent,
     PartogramListComponent,
     PartogramComponent,
+    AddMeasurementComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,9 +39,11 @@ import {PartogramComponent} from './partogram/partogram.component';
     FormsModule,
     AppRoutingModule,
     OwlDateTimeModule,
-    OwlNativeDateTimeModule
+    OwlNativeDateTimeModule,
+    MatDialogModule
   ],
-  providers: [D3Service, PatientService, PartogramService, AuthService],
-  bootstrap: [AppComponent]
+  providers: [D3Service, PatientService, PartogramService, AuthService, MatDialogModule],
+  bootstrap: [AppComponent],
+  entryComponents: [AddMeasurementComponent],
 })
 export class AppModule { }

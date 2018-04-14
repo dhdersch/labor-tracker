@@ -1,12 +1,16 @@
 
-<div align="center">
-<h1>{{title}}</h1>
+<div class="container">
 
-<nav>
-  <a routerLink="/patient">Patient</a>
-  <a routerLink="/list-partograms">View Partograms</a>
-  <a routerLink="/logout">Log Out</a>
-</nav>
+
+<div class="page-header">
+  <h1>{{title}}</h1>
+  <p>Track your cervical dilation with this user-friendly tool.</p>
+  <nav>
+    <a routerLink="/patient">Patient</a>
+    <a routerLink="/list-partograms">View Partograms</a>
+    <a routerLink="/logout">Log Out</a>
+  </nav>
+</div>
 
 <router-outlet></router-outlet>
 </div>

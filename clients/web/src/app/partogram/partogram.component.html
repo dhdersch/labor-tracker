@@ -1,31 +1,36 @@
 
 
 
+<div class="row">
 
-<table>
-<tr>
-  <th>
-    Dilation
-  </th>
-  <th>
-    Time
-  </th>
-  <th>
-    Remove
-  </th>
-</tr>
-<tr *ngFor="let m of measurements">
-  <td>{{m.dilation}}</td>
-  <td>{{m.time | date:'HH:mm'}}</td>
-  <td><button (click)="removeMeasurement(m.time)">Remove</button></td>
-</tr>
-</table>
+<div class="col-md-2">
+  <table>
+  <tr>
+    <th>
+      Dilation
+    </th>
+    <th>
+      Time
+    </th>
+    <th>
+      Remove
+    </th>
+  </tr>
+  <tr *ngFor="let m of measurements">
+    <td>{{m.dilation}}</td>
+    <td>{{m.time | date:'HH:mm'}}</td>
+    <td><button (click)="removeMeasurement(m.time)">Remove</button></td>
+  </tr>
+  </table>
+</div>
 
-<div>
+<div class="col-md-7">
   <svg />
 </div>
 
-<div>
+
+
+<div class="col-md3">
   <h3>Patient</h3>
 
   <table>
@@ -54,26 +59,14 @@
       <td>{{"...bmi loading..." }}</td>
     </tr>
   </table>
-</div>
-
-<div>
-  <h3>Add Measurement</h3>
   <div>
-    <p>time:
-    </p>
-    <div>
-    <owl-date-time-inline [(ngModel)]="newMeasurement.time"></owl-date-time-inline>
-    </div>
+    <button (click)="openAddMeasurementDialog()">Add Measurement</button>
   </div>
-  <div>
-    <label>Dilation:
-      <input [(ngModel)]="newMeasurement.dilation" placeholder="Dilation" >
-    </label>
-
-  </div>
-  <button (click)="addNewMeasurement()">Add Measurement!</button>
 </div>
 
 
 
- <button (click)="saveSvg()">Download Partogram</button>
+
+
+ <!--<button (click)="saveSvg()">Download Partogram</button>-->
+</div>
