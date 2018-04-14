@@ -50,9 +50,9 @@ export class LoginComponent implements OnInit {
         'sessionToken': AWS.config.credentials.sessionToken,
         'secretAccessKey': AWS.config.credentials.secretAccessKey,
         'expireTime': AWS.config.credentials['expireTime']
-      }
+      };
 
-      localStorage.setItem('aws_credentials', JSON.stringify(item))
+      localStorage.setItem('aws_credentials', JSON.stringify(item));
 
       zone.run(() => r.navigate(['/patient']));
     });

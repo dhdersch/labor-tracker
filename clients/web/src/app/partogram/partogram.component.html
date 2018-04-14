@@ -12,15 +12,18 @@
   <button (click)="removeMeasurement(m.time)">Remove Measurement</button>
 </div>
 
-
+<div>
+  <svg />
+</div>
 
 <div>
   <h3>Add Measurement</h3>
   <div>
     <p>time:
     </p>
+    <div>
     <owl-date-time-inline [(ngModel)]="newMeasurement.time"></owl-date-time-inline>
-
+    </div>
   </div>
   <div>
     <label>Dilation:
@@ -32,7 +35,5 @@
 </div>
 
 
-<div>
-  <svg />
-</div>
+
  <button (click)="saveSvg()">Download Partogram</button>

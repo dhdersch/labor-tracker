@@ -22,18 +22,15 @@ export class PartogramComponent implements OnInit {
   measurements: Measurement[];
   newMeasurement: Measurement = new Measurement();
   constructor(private partogramService: PartogramService, private route: ActivatedRoute, element: ElementRef, d3Service: D3Service) {
-    this.d3 = d3Service.getD3(); // <-- obtain the d3 object from the D3 Service
+    this.d3 = d3Service.getD3();
     this.parentNativeElement = element.nativeElement;
   }
 
   ngOnInit() {
-
-
     this.route.params.subscribe(params => {
       this.partogram_id = params['partogram_id'];
       this.getMeasurements();
     });
-
   }
 
   getMeasurements(): void {
@@ -45,44 +42,44 @@ export class PartogramComponent implements OnInit {
 
 
   validateDilation(dilation: number)  {
-    console.log("Validating dilation "+dilation)
+    console.log('Validating dilation ' + dilation);
     if (dilation > 11 || dilation < 0) {
-        return "Dilation must be a number between 0 and 11"
+        return 'Dilation must be a number between 0 and 11';
      }
-     if (dilation == undefined || dilation == null){
-       return "A dilation value between 0 and 11 must be provided"
+     if (dilation === undefined || dilation == null){
+       return 'A dilation value between 0 and 11 must be provided';
      }
-    return null
-  } 
+    return null;
+  }
 
-  //A valid unix timestamp should be 10 digits long & only contain digits
+  // A valid unix timestamp should be 10 digits long & only contain digits
   validateTime(time: Date)  {
-    console.log("Validating time "+time)
-    if (time.toString().length < 1){
-      return "A valid time must be selected"
+    console.log('Validating time ' + time);
+    if (time.toString().length < 1) {
+      return 'A valid time must be selected';
     }
-    return null
-  } 
+    return null;
+  }
 
   saveSvg(): void {
-    downloader.saveSvgAsPng(document.getElementsByTagName("svg")[0], "partogram.png",{height:document.getElementsByTagName("svg")[0].height.baseVal.value+100});
+    downloader.saveSvgAsPng(document.getElementsByTagName('svg')[0], 'partogram.png', {
+        height: document.getElementsByTagName('svg')[0].height.baseVal.value + 100
+      });
   }
 
   addNewMeasurement(): void {
     console.log(this.newMeasurement);
 
-    const dilationValidationMessage = this.validateDilation(this.newMeasurement.dilation)
+    const dilationValidationMessage = this.validateDilation(this.newMeasurement.dilation);
     if (dilationValidationMessage != null) {
       window.alert(dilationValidationMessage);
-       return
+       return;
     }
-    const timeValidationMessage = this.validateTime(this.newMeasurement.time)
+    const timeValidationMessage = this.validateTime(this.newMeasurement.time);
     if (timeValidationMessage != null) {
       window.alert(timeValidationMessage);
-       return
+       return;
     }
-
-    
 
     const sub = this.partogramService.addMeasurement(this.partogram_id, +this.newMeasurement.dilation, this.newMeasurement.time)
       .subscribe(r => {
@@ -103,9 +100,9 @@ export class PartogramComponent implements OnInit {
   }
 
   render(measurements: Measurement[]): void {
-    console.log(measurements);
+    console.log('initial measurements', measurements);
     if (measurements.length < 2) {
-      console.log('There should be at least 2 measurements before rendering the partogram!')
+      console.log('There should be at least 2 measurements before rendering the partogram!');
       return;
     }
     console.log('Rendering');
@@ -125,27 +122,28 @@ export class PartogramComponent implements OnInit {
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     // Convert measurements to a format that d3 understands! (the dates)
-    const transformedMeasurements: MeasurementData[] = [];
-    for (const measurement of measurements) {
-      const m: MeasurementData = new MeasurementData();
-      m.time = measurement.time;
-      m.dilation = measurement.dilation;
-      transformedMeasurements.push(m);
-    }
+    // const transformedMeasurements: MeasurementData[] = [];
+    // for (const measurement of measurements) {
+    //   const m: MeasurementData = new MeasurementData();
+    //   m.time = measurement.time;
+    //   m.dilation = measurement.dilation;
+    //   transformedMeasurements.push(m);
+    // }
 
-    transformedMeasurements.sort(this.compareTime);
+    console.log('measurements sort', measurements);
 
-    console.log(transformedMeasurements);
+    measurements.sort(this.compareTime);
 
-    const minMeasurement = transformedMeasurements[0];
-    const maxMeasurement = transformedMeasurements[transformedMeasurements.length - 1];
+    console.log(measurements);
+
+    const minMeasurement = measurements[0];
+    const maxMeasurement = measurements[measurements.length - 1];
 
     const timeScale = d3.scaleTime().domain([minMeasurement.time, maxMeasurement.time]).range([0, width - margin.left]);
     const dilationScale = d3.scaleLinear().domain([minMeasurement.dilation, maxMeasurement.dilation]).range([height - margin.top, 0]);
     const xAxis = d3.axisBottom(timeScale).tickFormat(d3.timeFormat('%H:%M'));
     const yAxis = d3.axisLeft(dilationScale).ticks(10);
 
-    console.log(timeScale);
     svg.append('g')
       .attr('class', 'x axis')
       .attr('transform', 'translate(0,' + height + ')')
@@ -167,7 +165,7 @@ export class PartogramComponent implements OnInit {
       .text('Value');
 
     svg.selectAll('bar')
-      .data(transformedMeasurements)
+      .data(measurements)
       .enter().append('rect')
       .style('fill', 'steelblue')
       .attr('x', function(d) { return timeScale(d.time); })

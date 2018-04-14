@@ -4,8 +4,8 @@ export class Measurement {
   id: string;
   constructor(time?: number, dilation?: number) {
     this.dilation = dilation || 0;
-    this.time = time ? new Date(time*1000) : new Date();
-    this.time.setSeconds(0,0)
+    this.time = time ? new Date(time * 1000) : new Date();
+    this.time.setSeconds(0, 0);
   }
 }
 

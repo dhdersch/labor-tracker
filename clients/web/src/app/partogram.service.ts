@@ -66,7 +66,7 @@ export class PartogramService {
 
     const p: Partogram = {
       partogram_id: 'fake'
-    }
+    };
 
     const request = {
       method: 'POST',
@@ -113,7 +113,7 @@ export class PartogramService {
 
     const measurement = new MeasurementBackend();
     measurement.dilation = dilation;
-    measurement.time = parseInt((time.getTime() / 1000).toFixed(0));
+    measurement.time = parseInt((time.getTime() / 1000).toFixed(0), 10);
 
     const request = {
       method: 'POST',
@@ -132,6 +132,17 @@ export class PartogramService {
     return this.http.post<Measurement>(url, measurement, options);
 
   }
+
+  convertMeasurements(measurementsList: any[]): Array<Measurement> {
+    const measurements: Array<Measurement> = [];
+    for (const m of measurementsList) {
+      const m2 = new Measurement(m['time'], m['dilation']);
+      m2.id = m['id'];
+      measurements.push(m2);
+    }
+    return measurements;
+  }
+
   getMeasurements(partogram_id: string): Observable<Measurement[]> {
     const url = `${this.partogramURL}/${partogram_id}/measurements`;
     const signer = this.signer();
@@ -155,7 +166,7 @@ export class PartogramService {
         console.log(s);
       }),
       map(response => {
-        return response['measurements'];
+        return this.convertMeasurements(response['measurements']);
       })
     );
   }
@@ -201,10 +212,6 @@ export class PartogramService {
       const partograms: Array<Partogram> = [];
 
       return of(partograms);
-
-
-
-
     };
   }
 
