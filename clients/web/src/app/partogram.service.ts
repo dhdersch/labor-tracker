@@ -86,7 +86,7 @@ export class PartogramService {
   }
 
 
-  deleteMeasurement(partogram_id: string, time: number) {
+  deleteMeasurement(partogram_id: string, time: number): Observable<void> {
     const url = `${this.partogramURL}/${partogram_id}/measurements/${time}`;
     const signer = this.signer();
 
@@ -102,7 +102,7 @@ export class PartogramService {
     const options = {
       headers: new HttpHeaders(signed)
     };
-    return this.http.delete<Measurement>(url, options);
+    return this.http.delete<void>(url, options);
   }
 
   addMeasurement(partogram_id: string, dilation: number, time: Date) {

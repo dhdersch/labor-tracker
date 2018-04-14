@@ -27,7 +27,7 @@
     "angular-google-signin": "^0.1.5",
     "aws-sdk": "^2.210.0",
     "aws-sign-web": "^1.4.0",
-    "bootstrap": "^4.0.0-beta.2",
+    "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",
     "d3-ng2-service": "^1.23.3",
     "jquery": "^3.3.1",

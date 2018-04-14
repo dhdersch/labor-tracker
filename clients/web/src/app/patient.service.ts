@@ -41,52 +41,52 @@ export class PatientService {
       headers: new HttpHeaders(signed)
     };
 
-    if (patient.initials === undefined || patient.initials.toString().length == 0){
+    if (patient.initials === undefined || patient.initials.toString().length === 0) {
       alert('No initials provided');
       return;
-    }else if (patient.initials.toString().length > 4){
+    }else if (patient.initials.toString().length > 4) {
       alert('Initials too long - maximum 4 characters');
       return;
     }
 
-    if (patient.age === undefined || patient.age.toString().length == 0){
+    if (patient.age === undefined || patient.age.toString().length === 0){
       alert('No age provided');
       return;
-    }else if (!Number.isInteger(parseInt(patient.age.toString()))){
+    }else if (!Number.isInteger(parseInt(patient.age.toString(), 10))){
       alert('Invalid age provided');
       return;
     }else {
-      patient.age = parseInt(patient.age.toString());
+      patient.age = parseInt(patient.age.toString(), 10);
     }
 
-    if (patient.num_past_vaginal_births === undefined || patient.num_past_vaginal_births.toString().length == 0){
+    if (patient.num_past_vaginal_births === undefined || patient.num_past_vaginal_births.toString().length === 0){
       alert('No number of past vaginal births provided');
       return;
-    }else if (!Number.isInteger(parseInt(patient.num_past_vaginal_births.toString()))){
+    }else if (!Number.isInteger(parseInt(patient.num_past_vaginal_births.toString(), 10))) {
       alert('Invalid number of past vaginal births provided');
       return;
     }else {
-      patient.num_past_vaginal_births = parseInt(patient.num_past_vaginal_births.toString());
+      patient.num_past_vaginal_births = parseInt(patient.num_past_vaginal_births.toString(), 10);
     }
 
-    if (patient.height === undefined || patient.height.toString().length == 0){
+    if (patient.height === undefined || patient.height.toString().length === 0) {
       alert('No height provided');
       return;
-    }else if (!Number.isInteger(parseInt(patient.height.toString()))){
+    }else if (!Number.isInteger(parseInt(patient.height.toString(), 10))) {
       alert('Invalid height provided');
       return;
     }else {
-      patient.height = parseInt(patient.height.toString());
+      patient.height = parseInt(patient.height.toString(), 10);
     }
 
-    if (patient.weight === undefined || patient.weight.toString().length == 0){
+    if (patient.weight === undefined || patient.weight.toString().length === 0) {
       alert('No weight provided');
       return;
-    }else if (!Number.isInteger(parseInt(patient.weight.toString()))){
+    }else if (!Number.isInteger(parseInt(patient.weight.toString(), 10))) {
       alert('Invalid weight provided');
       return;
     }else{
-      patient.weight = parseInt(patient.weight.toString());
+      patient.weight = parseInt(patient.weight.toString(), 10);
     }
     console.log(patient);
 

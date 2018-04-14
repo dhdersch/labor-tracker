@@ -1,19 +1,59 @@
 
 
 
-<h2>Partogram</h2>
 
-
-<div *ngFor="let m of measurements">
-  <div>Dilation</div>
-  <div>{{m.dilation}}</div>
-  <div>Time</div>
-  <div>{{m.time}}</div>
-  <button (click)="removeMeasurement(m.time)">Remove Measurement</button>
-</div>
+<table>
+<tr>
+  <th>
+    Dilation
+  </th>
+  <th>
+    Time
+  </th>
+  <th>
+    Remove
+  </th>
+</tr>
+<tr *ngFor="let m of measurements">
+  <td>{{m.dilation}}</td>
+  <td>{{m.time | date:'HH:mm'}}</td>
+  <td><button (click)="removeMeasurement(m.time)">Remove</button></td>
+</tr>
+</table>
 
 <div>
   <svg />
+</div>
+
+<div>
+  <h3>Patient</h3>
+
+  <table>
+    <tr>
+      <td>Initials</td>
+      <td>{{ patient.initials || "...initials loading..." }}</td>
+    </tr>
+    <tr>
+      <td>Age</td>
+      <td>{{ patient.age || "...age loading..." }}</td>
+    </tr>
+    <tr>
+      <td>Room</td>
+      <td>{{ patient.room_number || "...rooom loading..." }}</td>
+    </tr>
+    <tr>
+      <td>Height</td>
+      <td>{{ patient.height || "...height loading..." }}</td>
+    </tr>
+    <tr>
+      <td>Weight</td>
+      <td>{{ patient.weight || "...weight loading..." }}</td>
+    </tr>
+    <tr>
+      <td>BMI</td>
+      <td>{{"...bmi loading..." }}</td>
+    </tr>
+  </table>
 </div>
 
 <div>

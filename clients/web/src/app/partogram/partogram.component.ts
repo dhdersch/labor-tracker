@@ -6,6 +6,8 @@ import {PartogramService} from '../partogram.service';
 import {Measurement, MeasurementData} from '../measurement';
 import {ActivatedRoute} from '@angular/router';
 import { D3Service, D3, Selection} from 'd3-ng2-service';
+import {PatientService} from '../patient.service';
+import {Patient} from '../patient';
 
 @Component({
   selector: 'app-partogram',
@@ -18,12 +20,22 @@ export class PartogramComponent implements OnInit {
   private d3: D3;
   private parentNativeElement: any;
 
+  patient: Patient = new Patient();
+
   partogram_id: string;
   measurements: Measurement[];
   newMeasurement: Measurement = new Measurement();
-  constructor(private partogramService: PartogramService, private route: ActivatedRoute, element: ElementRef, d3Service: D3Service) {
+  constructor(private partogramService: PartogramService, private route: ActivatedRoute, element: ElementRef, d3Service: D3Service,
+              private patientService: PatientService) {
     this.d3 = d3Service.getD3();
     this.parentNativeElement = element.nativeElement;
+  }
+
+
+  getPatientDetails() {
+    this.patientService.getPatient().subscribe(patient => {
+      this.patient = patient;
+    });
   }
 
   ngOnInit() {
@@ -31,6 +43,7 @@ export class PartogramComponent implements OnInit {
       this.partogram_id = params['partogram_id'];
       this.getMeasurements();
     });
+    this.getPatientDetails();
   }
 
   getMeasurements(): void {
@@ -38,6 +51,10 @@ export class PartogramComponent implements OnInit {
       this.measurements = measurements;
       this.render(this.measurements);
     });
+  }
+
+  getBMI(): number {
+    return this.patient.getBMI();
   }
 
 
