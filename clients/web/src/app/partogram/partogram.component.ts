@@ -78,18 +78,15 @@ export class PartogramComponent implements OnInit {
     return this.patient.getBMI();
   }
 
-
-
-
   saveSvg(): void {
     downloader.saveSvgAsPng(document.getElementsByTagName('svg')[0], 'partogram.png', {
         height: document.getElementsByTagName('svg')[0].height.baseVal.value + 100
       });
   }
 
-
-  removeMeasurement(measurementTime: number): void {
-    const sub = this.partogramService.deleteMeasurement(this.partogram_id, measurementTime)
+  removeMeasurement(measurementTime: Date): void {
+    console.log('removing measurement with time', measurementTime.getTime() / 1000)
+    const sub = this.partogramService.deleteMeasurement(this.partogram_id, measurementTime.getTime() / 1000)
       .subscribe(r => {
           this.getMeasurements();
           sub.unsubscribe();
