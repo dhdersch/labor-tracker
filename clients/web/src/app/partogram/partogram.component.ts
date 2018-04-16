@@ -10,7 +10,7 @@ import {PatientService} from '../patient.service';
 import {Patient} from '../patient';
 import {AddMeasurementComponent} from '../add-measurement/add-measurement.component';
 
-import {MatDialog, MatDialogConfig} from "@angular/material";
+import {MatDialog, MatDialogConfig} from '@angular/material';
 
 @Component({
   selector: 'app-partogram',
