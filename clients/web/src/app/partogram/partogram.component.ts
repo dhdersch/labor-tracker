@@ -65,9 +65,9 @@ export class PartogramComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.partogram_id = params['partogram_id'];
       this.partogramService.getPartogram(this.partogram_id).subscribe(partogram => {
-        this.partogram = partogram
-      })
-      this.getMeasurements();
+        this.partogram = partogram;
+        this.getMeasurements();
+      });
     });
     this.getPatientDetails();
   }
