@@ -1,10 +1,12 @@
 from botocore.exceptions import ClientError
 from endpoints.helpers import *
+import json
 
 
 repo = make_repo()
 
 def handler(event, context):
+    print(json.dumps(event))
     identity = parse_identity(event)
     partogram_id = parse_partogram_id(event)
     try:

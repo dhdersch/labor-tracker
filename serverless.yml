@@ -51,10 +51,27 @@ functions:
     handler: endpoints/delete_partogram.handler
     events:
     - http:
+        authorizer: aws_iam
         path: partograms/{partogram_id}
         method: delete
-        cors: true
-        authorizer: aws_iam
+        cors:
+          origin: '*'
+          allowCredentials: false
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
 
   post_partogram:
     handler: endpoints/post_partogram.handler
@@ -62,26 +79,77 @@ functions:
       - http:
           path: partograms
           method: post
-          cors: true
           authorizer: aws_iam
+          cors:
+            origin: '*'
+            allowCredentials: false
+            headers:
+              - Content-Type
+              - content-type
+              - X-Amz-Date
+              - x-amz-date
+              - Authorization
+              - authorization
+              - X-Api-Key
+              - x-api-key
+              - X-Amz-Security-Token
+              - x-amz-security-token
+              - X-Amz-User-Agent
+              - x-amz-user-agent
+              - accept
+              - Accept
 
   get_partogram:
     handler: endpoints/get_partogram.handler
     events:
       - http:
+          authorizer: aws_iam
           path: partograms/{partogram_id}
           method: get
-          cors: true
-          authorizer: aws_iam
+          cors:
+            allowCredentials: false
+            origin: '*'
+            headers:
+              - Content-Type
+              - content-type
+              - X-Amz-Date
+              - x-amz-date
+              - Authorization
+              - authorization
+              - X-Api-Key
+              - x-api-key
+              - X-Amz-Security-Token
+              - x-amz-security-token
+              - X-Amz-User-Agent
+              - x-amz-user-agent
+              - accept
+              - Accept
 
   get_measurements:
     handler: endpoints/get_measurements.handler
     events:
     - http:
+        authorizer: aws_iam
         path: partograms/{partogram_id}/measurements
         method: get
-        cors: true
-        authorizer: aws_iam
+        cors:
+          origin: '*'
+          allowCredentials: false
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
 
   delete_measurement:
     handler: endpoints/delete_measurement.handler
@@ -89,35 +157,103 @@ functions:
     - http:
         path: partograms/{partogram_id}/measurements/{time}
         method: delete
-        cors: true
         authorizer: aws_iam
+        cors:
+          origin: '*'
+          allowCredentials: false
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
 
   post_measurement:
     handler: endpoints/post_measurement.handler
     events:
     - http:
+        authorizer: aws_iam
         path: partograms/{partogram_id}/measurements
         method: post
-        cors: true
-        authorizer: aws_iam
+        cors:
+          allowCredentials: false
+          origin: '*'
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
 
   list_partograms:
     handler: endpoints/list_partograms.handler
     events:
     - http:
+        authorizer: aws_iam
         path: partograms
         method: get
-        cors: true
-        authorizer: aws_iam
+        cors:
+          allowCredentials: false
+          origin: '*'
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
 
   get_patient:
     handler: endpoints/get_patient.handler
     events:
     - http:
+        authorizer: aws_iam
         path: patient
         method: get
-        cors: true
-        authorizer: aws_iam
+        cors:
+          allowCredentials: false
+          origin: '*'
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
 
   update_patient:
     handler: endpoints/update_patient.handler
@@ -125,17 +261,51 @@ functions:
     - http:
         path: patient/update
         method: put
-        cors: true
         authorizer: aws_iam
+        cors:
+          allowCredentials: false
+          origin: '*'
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
 
   put_patient:
     handler: endpoints/put_patient.handler
     events:
     - http:
+        authorizer: aws_iam
         path: patient
         method: put
-        cors: true
-        authorizer: aws_iam
+        cors:
+          allowCredentials: false
+          origin: '*'
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
 
 resources:
   Resources:
