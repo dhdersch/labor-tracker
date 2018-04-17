@@ -1,2 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~ng-pick-datetime/assets/style/picker.min.css";
+
+/* Used for adding measurements to partograms */
+.add-measurement-modal{
+  background-color: white;
+  border-radius: 5%;
+}

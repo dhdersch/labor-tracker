@@ -43,8 +43,10 @@ export class PartogramComponent implements OnInit {
   openAddMeasurementDialog() {
     // https://material.angular.io/components/dialog/overview
     const dialogRef = this.dialog.open(AddMeasurementComponent, {
-      height: '400px',
-      width: '600px',
+      height: '355px',
+      width: '525px',
+      panelClass: 'add-measurement-modal',
+      hasBackdrop: true,
       data: {
         partogram_id: this.partogram_id,
       }

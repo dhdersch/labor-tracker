@@ -1,17 +1,25 @@
-<div>
+<div class="add-measurement">
 <h3>Add Measurement</h3>
-<div>
-<p>time:
-</p>
-<div>
-<owl-date-time-inline [(ngModel)]="newMeasurement.time"></owl-date-time-inline>
-</div>
-</div>
-<div>
-<label>Dilation:
-<input [(ngModel)]="newMeasurement.dilation" placeholder="Dilation" >
-</label>
-
-</div>
-<button (click)="addNewMeasurement()">Add Measurement!</button>
+<table style="width:100%;margin-top:10px;">
+	<tr>
+		<td style="text-align:center;">
+			<owl-date-time-inline [(ngModel)]="newMeasurement.time"></owl-date-time-inline>
+		</td>
+		<td>
+			<table style="width:100%;">
+				<tr>
+					<td style="text-align:center;">
+						<label>Dilation (cm):</label>
+						<input [(ngModel)]="newMeasurement.dilation" placeholder="Dilation" >
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:center;">
+						<button style="text-align:center;" (click)="addNewMeasurement()">Add Measurement!</button>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
 </div>
