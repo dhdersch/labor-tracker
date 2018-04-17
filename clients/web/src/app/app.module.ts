@@ -17,7 +17,7 @@ import { D3Service } from 'd3-ng2-service';
 import { AuthService } from './auth.service';
 import { AppRoutingModule } from './app-routing.module';
 import { PartogramListComponent } from './partogram-list/partogram-list.component';
-import {PartogramComponent} from './partogram/partogram.component';
+import { PartogramComponent } from './partogram/partogram.component';
 import { AddMeasurementComponent } from './add-measurement/add-measurement.component';
 import {MatDialogModule} from '@angular/material';
 import { AddPartogramComponent } from './add-partogram/add-partogram.component';
@@ -48,4 +48,4 @@ import { AddPartogramComponent } from './add-partogram/add-partogram.component';
   bootstrap: [AppComponent],
   entryComponents: [AddMeasurementComponent, AddPartogramComponent],
 })
-export class AppModule { }
+export class AppModule {}

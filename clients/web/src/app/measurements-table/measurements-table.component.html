@@ -1,0 +1,27 @@
+<div class="col-md-2">
+  <p>this is the measurement-table</p>
+  <table>
+    <tr>
+      <th>
+        Dilation
+      </th>
+      <th>
+        Time
+      </th>
+      <th>
+        Remove
+      </th>
+    </tr>
+    <tr *ngFor="let m of measurements">
+      <td>{{m.dilation}}</td>
+      <td>{{m.time | date:'HH:mm'}}</td>
+      <td>
+        <button (click)="removeMeasurementClicked(m.time)">Remove</button>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div class="col-md-7">
+  <svg />
+</div>
