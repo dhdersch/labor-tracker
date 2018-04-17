@@ -125,7 +125,7 @@ class PatientRepo(object):
         partogram_id = uuid.uuid4()
         o = self.__s3_resource.Object(self.__bucket, self.__prefix + patient_id + "/" + str(partogram_id))
         data['partogram_id'] = str(partogram_id)
-        o.put(Body=json.dumps())
+        o.put(Body=json.dumps(data))
         return data
 
     def get_patient(self, patient_id):
