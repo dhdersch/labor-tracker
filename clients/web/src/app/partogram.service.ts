@@ -40,7 +40,7 @@ export class PartogramService {
   }
 
 
-  deletePartogram(labor_start_time: string): Observable<void> {
+  deletePartogram(labor_start_time: number): Observable<void> {
     const url = `${this.partogramURL}/${labor_start_time}`;
     const signer = this.signer();
     const request = {
@@ -86,7 +86,7 @@ export class PartogramService {
   }
 
 
-  deleteMeasurement(labor_start_time: string, time: number): Observable<void> {
+  deleteMeasurement(labor_start_time: number, time: number): Observable<void> {
     const url = `${this.partogramURL}/${labor_start_time}/measurements/${time}`;
     const signer = this.signer();
 
@@ -143,7 +143,7 @@ export class PartogramService {
     return measurements;
   }
 
-  getMeasurements(labor_start_time: string): Observable<Measurement[]> {
+  getMeasurements(labor_start_time: number): Observable<Measurement[]> {
     const url = `${this.partogramURL}/${labor_start_time}/measurements`;
     const signer = this.signer();
     const request = {
@@ -201,7 +201,7 @@ export class PartogramService {
 
   }
 
-  getPartogram(labor_start_time: string): Observable<Partogram> {
+  getPartogram(labor_start_time: number): Observable<Partogram> {
     const url = `${this.partogramURL}/${labor_start_time}`;
     const signer = this.signer();
     const request = {

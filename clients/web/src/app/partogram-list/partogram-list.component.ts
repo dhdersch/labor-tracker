@@ -29,7 +29,7 @@ export class PartogramListComponent implements OnInit {
     });
   }
 
-  removePartogram(labor_start_time: string): void {
+  removePartogram(labor_start_time: number): void {
     this.partogramService.deletePartogram(labor_start_time).subscribe(r => {
       console.log('removed partogram');
       this.getPartograms();
