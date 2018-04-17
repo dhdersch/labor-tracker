@@ -1,0 +1,9 @@
+getUserBMI
+	getBMIChart
+	getLastMeasurementTime
+	calcHoursSinceLaborStart (lastTime - currentTIme?)
+
+Say 6 hours in- look at chart and get closest 
+
+Compare current to typical dilation via getDystociaByBmi
+Display how different? +/- more open than usual 
