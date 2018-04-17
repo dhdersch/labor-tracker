@@ -1,11 +1,8 @@
-import boto3
-import os
 from botocore.exceptions import ClientError
-from endpoints.patient import PatientRepo
 from endpoints.helpers import *
 
 
-repo = PatientRepo(s3=boto3.resource('s3'), bucket=os.environ.get("BUCKET"), prefix="users/")
+repo = make_repo()
 
 
 def handler(event, context):

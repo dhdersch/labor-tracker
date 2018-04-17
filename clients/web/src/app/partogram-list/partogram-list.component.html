@@ -1,11 +1,11 @@
 <div class="partogram-list">
 <li *ngFor="let partogram of partograms; let i = index">
 
-  <a [routerLink]="['/partograms', partogram.partogram_id]">
+  <a [routerLink]="['/partograms', partogram.labor_start_time]">
     Partogram {{i + 1}}
   </a>
 
-  <button (click)="removePartogram(partogram.partogram_id)">Delete partogram</button>
+  <button (click)="removePartogram(partogram.labor_start_time)">Delete partogram</button>
 </li>
 
 

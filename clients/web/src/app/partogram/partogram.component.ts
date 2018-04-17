@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewEncapsulation,Inject } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 
 import * as downloader from 'save-svg-as-png';
 
@@ -7,7 +7,7 @@ import {Measurement, MeasurementData} from '../measurement';
 import {ActivatedRoute} from '@angular/router';
 import { D3Service, D3, Selection} from 'd3-ng2-service';
 import {PatientService} from '../patient.service';
-import {Patient,DataPoints,Point} from '../patient';
+import {Patient, DataPoints, Point} from '../patient';
 import {AddMeasurementComponent} from '../add-measurement/add-measurement.component';
 import {Partogram} from '../partogram';
 import {MatDialog, MatDialogConfig} from '@angular/material';
@@ -28,7 +28,7 @@ export class PartogramComponent implements OnInit {
 
   patient: Patient = new Patient();
 
-  partogram_id: string;
+  labor_start_time: number;
   partogram: Partogram;
   measurements: Measurement[];
   constructor(private partogramService: PartogramService,
@@ -49,7 +49,7 @@ export class PartogramComponent implements OnInit {
       panelClass: 'add-measurement-modal',
       hasBackdrop: true,
       data: {
-        partogram_id: this.partogram_id,
+        labor_start_time: this.labor_start_time,
       }
     }).afterClosed().subscribe(() =>
       this.getMeasurements()
@@ -65,8 +65,8 @@ export class PartogramComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.partogram_id = params['partogram_id'];
-      this.partogramService.getPartogram(this.partogram_id).subscribe(partogram => {
+      this.labor_start_time = params['labor_start_time'];
+      this.partogramService.getPartogram(this.labor_start_time).subscribe(partogram => {
         this.partogram = partogram;
         this.getMeasurements();
       });
@@ -75,16 +75,16 @@ export class PartogramComponent implements OnInit {
   }
 
   getMeasurements(): void {
-    this.partogramService.getMeasurements(this.partogram_id).subscribe(measurements => {
+    this.partogramService.getMeasurements(this.labor_start_time).subscribe(measurements => {
       this.measurements = measurements;
       this.render(this.measurements);
     });
   }
 
   getBMI(): number {
-    const metric_height = this.patient.height / 39.3700787
-    const metric_weight = this.patient.weight / 2.20462
-    const BMI = metric_weight / Math.pow(metric_height,2);
+    const metric_height = this.patient.height / 39.3700787;
+    const metric_weight = this.patient.weight / 2.20462;
+    const BMI = metric_weight / Math.pow(metric_height, 2);
     return Math.round(BMI * 100) / 100;
   }
 
@@ -95,8 +95,8 @@ export class PartogramComponent implements OnInit {
   }
 
   removeMeasurement(measurementTime: Date): void {
-    console.log('removing measurement with time', measurementTime.getTime() / 1000)
-    const sub = this.partogramService.deleteMeasurement(this.partogram_id, measurementTime.getTime() / 1000)
+    console.log('removing measurement with time', measurementTime.getTime() / 1000);
+    const sub = this.partogramService.deleteMeasurement(this.labor_start_time, measurementTime.getTime() / 1000)
       .subscribe(r => {
           this.getMeasurements();
           sub.unsubscribe();
@@ -131,20 +131,20 @@ export class PartogramComponent implements OnInit {
 
     console.log(measurements);
 
-    const minMeasurementTime = measurements[0].time
+    const minMeasurementTime = measurements[0].time;
     const minMeasurementDilation = Math.min(...measurements.map(o => o.dilation));
-    const maxMeasurementTime = measurements[measurements.length - 1].time
+    const maxMeasurementTime = measurements[measurements.length - 1].time;
     const maxMeasurementDilation = Math.max(...measurements.map(o => o.dilation));
 
     const timeScale = d3.scaleTime().domain([minMeasurementTime, maxMeasurementTime]).range([0, width - margin.left]);
     const dilationScale = d3.scaleLinear().domain([minMeasurementDilation, maxMeasurementDilation]).range([height - margin.top, 0]);
-    const time_range = (maxMeasurementTime.getTime() - minMeasurementTime.getTime())
-    const time_width = {}
+    const time_range = (maxMeasurementTime.getTime() - minMeasurementTime.getTime());
+    const time_width = {};
     for (let i = 1; i < measurements.length; i++) {
       time_width[measurements[i - 1].time.getTime()] =
         ((measurements[i].time.getTime() - measurements[i - 1].time.getTime()) / time_range) * width;
     }
-    time_width[maxMeasurementTime.getTime()] = width
+    time_width[maxMeasurementTime.getTime()] = width;
     const xAxis = d3.axisBottom(timeScale).tickFormat(d3.timeFormat('%H:%M'));
     const yAxis = d3.axisLeft(dilationScale).ticks(10);
 
@@ -181,8 +181,8 @@ export class PartogramComponent implements OnInit {
 
   getStatus() {
     const dp = this.getDystociaByBmi(this.getBMI());
-    const most_recent = this.measurements[this.measurements.length-1];
-    const elapsed_hours = (most_recent.time.getTime()/1000 - this.partogram.labor_start_time)/60;
+    const most_recent = this.measurements[this.measurements.length - 1];
+    const elapsed_hours = (most_recent.time.getTime() / 1000 - this.partogram.labor_start_time) / 60;
     const point = dp.match(elapsed_hours);
     const dilation_difference = most_recent.dilation - point.dilation;
     return {
@@ -190,7 +190,7 @@ export class PartogramComponent implements OnInit {
       'elapsed_hours': elapsed_hours,
       'typical_dilation': point.dilation,
       'message': 'tbd-call function to decide',
-    }
+    };
   }
 
   getDystociaByBmi(bmi: number): DataPoints {

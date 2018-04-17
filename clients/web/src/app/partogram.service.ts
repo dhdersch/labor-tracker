@@ -40,8 +40,8 @@ export class PartogramService {
   }
 
 
-  deletePartogram(partogram_id: string): Observable<void> {
-    const url = `${this.partogramURL}/${partogram_id}`;
+  deletePartogram(labor_start_time: string): Observable<void> {
+    const url = `${this.partogramURL}/${labor_start_time}`;
     const signer = this.signer();
     const request = {
       method: 'DELETE',
@@ -65,8 +65,7 @@ export class PartogramService {
     const signer = this.signer();
 
     const p: Partogram = {
-      partogram_id: '',
-      labor_start_time: (Date.now())/1000,
+      labor_start_time: (Date.now()) / 1000,
     };
 
     const request = {
@@ -87,8 +86,8 @@ export class PartogramService {
   }
 
 
-  deleteMeasurement(partogram_id: string, time: number): Observable<void> {
-    const url = `${this.partogramURL}/${partogram_id}/measurements/${time}`;
+  deleteMeasurement(labor_start_time: string, time: number): Observable<void> {
+    const url = `${this.partogramURL}/${labor_start_time}/measurements/${time}`;
     const signer = this.signer();
 
     const request = {
@@ -106,10 +105,10 @@ export class PartogramService {
     return this.http.delete<void>(url, options);
   }
 
-  addMeasurement(partogram_id: string, dilation: number, time: Date) {
-    console.log('add partogram measurement for', partogram_id, dilation, time);
+  addMeasurement(labor_start_time: string, dilation: number, time: Date) {
+    console.log('add partogram measurement for', labor_start_time, dilation, time);
 
-    const url = `${this.partogramURL}/${partogram_id}/measurements`;
+    const url = `${this.partogramURL}/${labor_start_time}/measurements`;
     const signer = this.signer();
 
     const measurement = new MeasurementBackend();
@@ -144,8 +143,8 @@ export class PartogramService {
     return measurements;
   }
 
-  getMeasurements(partogram_id: string): Observable<Measurement[]> {
-    const url = `${this.partogramURL}/${partogram_id}/measurements`;
+  getMeasurements(labor_start_time: string): Observable<Measurement[]> {
+    const url = `${this.partogramURL}/${labor_start_time}/measurements`;
     const signer = this.signer();
     const request = {
       method: 'GET',
@@ -202,8 +201,8 @@ export class PartogramService {
 
   }
 
-    getPartogram(partogram_id: string): Observable<Partogram> {
-    const url = `${this.partogramURL}/${partogram_id}`;
+  getPartogram(labor_start_time: string): Observable<Partogram> {
+    const url = `${this.partogramURL}/${labor_start_time}`;
     const signer = this.signer();
     const request = {
       method: 'GET',
