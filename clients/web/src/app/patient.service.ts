@@ -44,8 +44,6 @@ export class PatientService {
 
   updatePatient(patient: Patient): Observable<Patient> {
 
-
-
     if (patient.initials === undefined || patient.initials.toString().length === 0) {
       alert('No initials provided');
       return;

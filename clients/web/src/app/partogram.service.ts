@@ -65,7 +65,8 @@ export class PartogramService {
     const signer = this.signer();
 
     const p: Partogram = {
-      partogram_id: 'fake'
+      partogram_id: 'fake',
+      labor_start_time: (Date.now())/1000,
     };
 
     const request = {
