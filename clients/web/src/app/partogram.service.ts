@@ -65,7 +65,7 @@ export class PartogramService {
     const signer = this.signer();
 
     const p: Partogram = {
-      partogram_id: 'fake',
+      partogram_id: '',
       labor_start_time: (Date.now())/1000,
     };
 
@@ -201,6 +201,34 @@ export class PartogramService {
     );
 
   }
+
+    getPartogram(partogram_id: string): Observable<Partogram> {
+    const url = `${this.partogramURL}/${partogram_id}`;
+    const signer = this.signer();
+    const request = {
+      method: 'GET',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: null
+    };
+
+    const signed = signer.sign(request);
+
+    const options = {
+      headers: new HttpHeaders(signed)
+    };
+
+    return this.http.get<Partogram>(url, options).pipe(
+      tap(s => {
+        console.log(s);
+      }),
+    );
+
+  }
+
+
 
 
   private handleNotFound () {

@@ -9,7 +9,7 @@ import { D3Service, D3, Selection} from 'd3-ng2-service';
 import {PatientService} from '../patient.service';
 import {Patient,DataPoints,Point} from '../patient';
 import {AddMeasurementComponent} from '../add-measurement/add-measurement.component';
-
+import {Partogram} from '../partogram';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 
 @Component({
@@ -29,6 +29,7 @@ export class PartogramComponent implements OnInit {
   patient: Patient = new Patient();
 
   partogram_id: string;
+  partogram: Partogram;
   measurements: Measurement[];
   constructor(private partogramService: PartogramService,
               private route: ActivatedRoute,
@@ -65,7 +66,10 @@ export class PartogramComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.partogram_id = params['partogram_id'];
-      this.getMeasurements();
+      this.partogramService.getPartogram(this.partogram_id).subscribe(partogram => {
+        this.partogram = partogram;
+        this.getMeasurements();
+      });
     });
     this.getPatientDetails();
   }
@@ -175,7 +179,21 @@ export class PartogramComponent implements OnInit {
 
   }
 
-    getDystociaByBmi(bmi: number): DataPoints {
+  getStatus() {
+    const dp = this.getDystociaByBmi(this.getBMI());
+    const most_recent = this.measurements[this.measurements.length-1];
+    const elapsed_hours = (most_recent.time.getTime()/1000 - this.partogram.labor_start_time)/60;
+    const point = dp.match(elapsed_hours);
+    const dilation_difference = most_recent.dilation - point.dilation;
+    return {
+      'dilation_difference': dilation_difference,
+      'elapsed_hours': elapsed_hours,
+      'typical_dilation': point.dilation,
+      'message': 'tbd-call function to decide',
+    }
+  }
+
+  getDystociaByBmi(bmi: number): DataPoints {
     const currentBmi = bmi;
     if (currentBmi < 25) {
       return new DataPoints(

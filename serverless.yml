@@ -63,6 +63,15 @@ functions:
           cors: true
           authorizer: aws_iam
 
+  get_partogram:
+    handler: endpoints/get_partogram.handler
+    events:
+      - http:
+          path: partograms/{partogram_id}
+          method: get
+          cors: true
+          authorizer: aws_iam
+
   get_measurements:
     handler: endpoints/get_measurements.handler
     events:

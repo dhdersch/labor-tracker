@@ -85,6 +85,15 @@ class PatientRepo(object):
             Item=measurement
         )
 
+    def get_partogram(self, identity, partogram_id):
+
+        o = self.__s3_resource.Object(self.__bucket, self.__prefix + identity + "/" + str(partogram_id))
+        response = o.get(ResponseContentType="application/json")
+        data = json.loads(response['Body'].read().decode("utf-8"))
+        data['partogram_id'] = partogram_id
+        return data
+
+
     def list_partograms(self, patient_id):
         """
         Gets a list of the identifiers for the measurements set (each measurement set is the data for a single
@@ -112,13 +121,12 @@ class PatientRepo(object):
             'partograms': result
         }
 
-    def make_new_partogram(self, patient_id):
+    def make_new_partogram(self, patient_id, data):
         partogram_id = uuid.uuid4()
         o = self.__s3_resource.Object(self.__bucket, self.__prefix + patient_id + "/" + str(partogram_id))
-        o.put()
-        return {
-            'partogram_id': str(partogram_id)
-        }
+        data['partogram_id'] = str(partogram_id)
+        o.put(Body=json.dumps())
+        return data
 
     def get_patient(self, patient_id):
         """
