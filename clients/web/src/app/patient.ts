@@ -14,3 +14,14 @@ export class Patient {
   }
 }
 
+export class DataPoints {
+  constructor(public name: string,
+              public values: Point[],
+              public color: string= '#78C2AD') {
+  }
+}
+
+export class Point {
+  constructor(public hours: number, public duration: number) {
+  }
+}

@@ -7,7 +7,7 @@ import {Measurement, MeasurementData} from '../measurement';
 import {ActivatedRoute} from '@angular/router';
 import { D3Service, D3, Selection} from 'd3-ng2-service';
 import {PatientService} from '../patient.service';
-import {Patient} from '../patient';
+import {Patient,DataPoints,Point} from '../patient';
 import {AddMeasurementComponent} from '../add-measurement/add-measurement.component';
 
 import {MatDialog, MatDialogConfig} from '@angular/material';
@@ -167,6 +167,76 @@ export class PartogramComponent implements OnInit {
       .attr('y', function(d) { return dilationScale(d.dilation); })
       .attr('height', function(d) { return height - dilationScale(d.dilation); });
 
+  }
+
+    getDystociaByBmi(bmi: number): DataPoints {
+    const currentBmi = bmi;
+    if (currentBmi < 25) {
+      return new DataPoints(
+          'Dystocia for BMI (< 25)',
+          [
+              new Point(5, 4.6),
+              new Point(6, 7.5),
+              new Point(7, 9.5),
+              new Point(8, 11.0),
+              new Point(9, 12.3),
+              new Point(10, 13.9)
+          ],
+          '#FFCE67'
+      );
+    }else if (currentBmi >= 25 && currentBmi < 30) {
+      return new DataPoints(
+          'Dystocia for BMI (25-30)',
+          [
+              new Point(5, 5.0),
+              new Point(6, 7.9),
+              new Point(7, 9.9),
+              new Point(8, 11.4),
+              new Point(9, 12.7),
+              new Point(10, 14.4)
+          ],
+          '#FFCE67'
+      );
+    }else if (currentBmi >= 30 && currentBmi < 35) {
+      return new DataPoints(
+          'Dystocia for BMI (30-35)',
+          [
+              new Point(5, 5.2),
+              new Point(6, 8.3),
+              new Point(7, 10.4),
+              new Point(8, 11.9),
+              new Point(9, 13.3),
+              new Point(10, 15.1)
+          ],
+          '#FFCE67'
+      );
+    }else if (currentBmi >= 35 && currentBmi < 40) {
+      return new DataPoints(
+          'Dystocia for BMI (35-40)',
+          [
+              new Point(5, 5.9),
+              new Point(6, 9.4),
+              new Point(7, 11.7),
+              new Point(8, 13.4),
+              new Point(9, 14.7),
+              new Point(10, 16.6)
+          ],
+          '#FFCE67'
+      );
+    }else if (currentBmi >= 40) {
+      return new DataPoints(
+        'Dystocia for BMI (> 40)',
+        [
+            new Point(5, 7.4),
+            new Point(6, 11.6),
+            new Point(7, 14.1),
+            new Point(8, 15.8),
+            new Point(9, 17.2),
+            new Point(10, 19.1)
+        ],
+        '#FFCE67'
+      );
+    }
   }
 
   compareTime(a, b) {
