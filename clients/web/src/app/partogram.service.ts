@@ -202,6 +202,34 @@ export class PartogramService {
 
   }
 
+    getPartogram(partogram_id: string): Observable<Partogram> {
+    const url = `${this.partogramURL}/${partogram_id}`;
+    const signer = this.signer();
+    const request = {
+      method: 'GET',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: null
+    };
+
+    const signed = signer.sign(request);
+
+    const options = {
+      headers: new HttpHeaders(signed)
+    };
+
+    return this.http.get<Partogram>(url, options).pipe(
+      tap(s => {
+        console.log(s);
+      }),
+    );
+
+  }
+
+
+
 
   private handleNotFound () {
     return (error: any): Observable<Array<Partogram>> => {

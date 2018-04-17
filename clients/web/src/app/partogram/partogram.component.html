@@ -58,6 +58,10 @@
       <td>BMI</td>
       <td>{{ getBMI() || "...bmi loading..." }}</td>
     </tr>
+    <tr>
+      <td>Status</td>
+      <td>{{ getStatus().dilation_difference || "...status loading..." }}</td>
+    </tr>
   </table>
   <div>
     <button (click)="openAddMeasurementDialog()">Add Measurement</button>
