@@ -44,23 +44,7 @@ export class PatientService {
 
   updatePatient(patient: Patient): Observable<Patient> {
 
-    const url = `${this.patientUrl}/update`;
-    const signer = this.signer();
-    const request = {
-      method: 'PUT',
-      url: url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      data: patient,
-    };
 
-    const signed = signer.sign(request);
-
-    const options = {
-      headers: new HttpHeaders(signed)
-    };
 
     if (patient.initials === undefined || patient.initials.toString().length === 0) {
       alert('No initials provided');
@@ -110,7 +94,23 @@ export class PatientService {
       patient.weight = parseInt(patient.weight.toString(), 10);
     }
     console.log(patient);
+    const url = `${this.patientUrl}/update`;
+    const signer = this.signer();
+    const request = {
+      method: 'PUT',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      data: patient,
+    };
 
+    const signed = signer.sign(request);
+
+    const options = {
+      headers: new HttpHeaders(signed)
+    };
 
     return this.http.put<Patient>(url, patient, options).pipe(
       tap(_ => console.log(`fetched patient`))
