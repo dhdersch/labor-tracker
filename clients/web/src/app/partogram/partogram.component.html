@@ -17,7 +17,7 @@
     </th>
   </tr>
   <tr *ngFor="let m of measurements">
-    <td>{{m.dilation}}</td>
+    <td>{{m.dilation}} cm</td>
     <td>{{m.time | date:'HH:mm'}}</td>
     <td><button (click)="removeMeasurement(m.time)">Remove</button></td>
   </tr>
