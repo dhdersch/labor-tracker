@@ -145,16 +145,20 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-    # Clinicians:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #     TableName: clinicians-${self:custom.stage}
-    #     AttributeDefinitions:
-    #       - AttributeName: key
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: key
-    #         KeyType: HASH
-    #     ProvisionedThroughput:
-    #       ReadCapacityUnits: 1
-    #       WriteCapacityUnits: 1
+    #  ProviderMap:
+    #    Type: AWS::DynamoDB::Table
+    #    Properties:
+    #      TableName: providermap-${self:custom.stage}
+    #      AttributeDefinitions:
+    #        - AttributeName: provider_id
+    #          AttributeType: S
+    #        - AttributeName: user_id
+    #          AttributeType: S
+    #      KeySchema:
+    #        - AttributeName: provider_id
+    #          KeyType: HASH
+    #        - AttributeName: user_id
+    #          KeyType: RANGE
+    #      ProvisionedThroughput:
+    #        ReadCapacityUnits: 1
+    #        WriteCapacityUnits: 1

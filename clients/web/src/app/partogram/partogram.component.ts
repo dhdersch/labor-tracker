@@ -133,9 +133,10 @@ export class PartogramComponent implements OnInit {
     const timeScale = d3.scaleTime().domain([minMeasurementTime, maxMeasurementTime]).range([0, width - margin.left]);
     const dilationScale = d3.scaleLinear().domain([minMeasurementDilation, maxMeasurementDilation]).range([height - margin.top, 0]);
     const time_range = (maxMeasurementTime.getTime() - minMeasurementTime.getTime())
-    let time_width = {}
+    const time_width = {}
     for (let i = 1; i < measurements.length; i++) {
-      time_width[measurements[i-1].time.getTime()] = ((measurements[i].time.getTime() - measurements[i-1].time.getTime()) / time_range) * width
+      time_width[measurements[i - 1].time.getTime()] =
+        ((measurements[i].time.getTime() - measurements[i - 1].time.getTime()) / time_range) * width;
     }
     time_width[maxMeasurementTime.getTime()] = width
     const xAxis = d3.axisBottom(timeScale).tickFormat(d3.timeFormat('%H:%M'));

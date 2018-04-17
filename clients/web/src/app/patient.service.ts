@@ -10,6 +10,7 @@ import * as AWSign from 'aws-sign-web';
 import * as AWS from 'aws-sdk';
 import {AuthService} from './auth.service';
 
+
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -22,6 +23,25 @@ export class PatientService {
   constructor(
     private http: HttpClient, private authService: AuthService) {
   }
+
+
+  signer(): AWSign.AwsSigner {
+
+    this.authService.refreshAWSCredentials();
+    const cfg = {
+      region: 'us-east-1',
+      service: 'execute-api',
+      accessKeyId: AWS.config.credentials.accessKeyId,
+      secretAccessKey: AWS.config.credentials.secretAccessKey,
+      sessionToken: AWS.config.credentials.sessionToken,
+    };
+
+    console.log(cfg);
+    return new AWSign.AwsSigner(cfg);
+  }
+
+
+
   updatePatient(patient: Patient): Observable<Patient> {
 
     const url = `${this.patientUrl}/update`;
@@ -31,6 +51,7 @@ export class PatientService {
       url: url,
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
       data: patient,
     };
@@ -98,20 +119,6 @@ export class PatientService {
   }
 
 
-  signer(): AWSign.AwsSigner {
-    this.authService.refreshAWSCredentials();
-    const cfg = {
-      region: 'us-east-1',
-      service: 'execute-api',
-      accessKeyId: AWS.config.credentials.accessKeyId,
-      secretAccessKey: AWS.config.credentials.secretAccessKey,
-      sessionToken: AWS.config.credentials.sessionToken,
-    };
-
-    console.log(cfg);
-    return new AWSign.AwsSigner(cfg);
-  }
-
 
 
   getPatient(): Observable<Patient> {
@@ -122,6 +129,7 @@ export class PatientService {
       url: url,
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
       data: null
     };
