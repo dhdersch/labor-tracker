@@ -1,5 +1,5 @@
 <div class="partogram-list">
-<table>
+<table class="partogram-list-table">
   <th>Time</th>
   <th>View</th>
   <th>Delete</th>
@@ -8,9 +8,9 @@
 
     <td>{{ convertUnixDate(partogram.labor_start_time) | date:'short' }}</td>
     <td>
-    <a [routerLink]="['/partograms', partogram.labor_start_time]">
-      Partogram {{i + 1}}
-    </a>
+    <button [routerLink]="['/partograms', partogram.labor_start_time]">
+      Partogram #{{i + 1}}
+    </button>
     </td>
 
     <td><button (click)="removePartogram(partogram.labor_start_time)">Delete partogram</button></td>
