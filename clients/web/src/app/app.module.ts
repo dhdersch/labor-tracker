@@ -17,9 +17,10 @@ import { D3Service } from 'd3-ng2-service';
 import { AuthService } from './auth.service';
 import { AppRoutingModule } from './app-routing.module';
 import { PartogramListComponent } from './partogram-list/partogram-list.component';
-import {PartogramComponent} from './partogram/partogram.component';
+import { PartogramComponent } from './partogram/partogram.component';
 import { AddMeasurementComponent } from './add-measurement/add-measurement.component';
-import {MatDialogModule} from '@angular/material';
+import { MatDialogModule } from '@angular/material';
+import { MeasurementsTableComponent } from './measurements-table/measurements-table.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {MatDialogModule} from '@angular/material';
     PartogramListComponent,
     PartogramComponent,
     AddMeasurementComponent,
+    MeasurementsTableComponent
   ],
   imports: [
     BrowserModule,
@@ -44,6 +46,6 @@ import {MatDialogModule} from '@angular/material';
   ],
   providers: [D3Service, PatientService, PartogramService, AuthService, MatDialogModule],
   bootstrap: [AppComponent],
-  entryComponents: [AddMeasurementComponent],
+  entryComponents: [AddMeasurementComponent]
 })
-export class AppModule { }
+export class AppModule {}
