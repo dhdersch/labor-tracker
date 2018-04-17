@@ -76,7 +76,10 @@ export class PartogramComponent implements OnInit {
   }
 
   getBMI(): number {
-    return this.patient.getBMI();
+    const metric_height = this.patient.height / 39.3700787
+    const metric_weight = this.patient.weight / 2.20462
+    const BMI = metric_weight / Math.pow(metric_height,2);
+    return Math.round(BMI * 100) / 100;
   }
 
   saveSvg(): void {
