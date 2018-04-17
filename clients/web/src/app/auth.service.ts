@@ -32,6 +32,11 @@ export class AuthService {
   }
 
   refreshAWSCredentials(): void {
+
+    if (!this.isAuthenticated()) {
+      console.log('YOU ARE NOT AUTHENTICATED');
+    }
+
     const storedCreds = localStorage.getItem('aws_credentials');
     const parsedCreds = JSON.parse(storedCreds);
     AWS.config.credentials = new Credentials(parsedCreds['accessKeyId'], parsedCreds['secretAccessKey'], parsedCreds['sessionToken']);
