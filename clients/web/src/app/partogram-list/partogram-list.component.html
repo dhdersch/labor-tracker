@@ -1,12 +1,22 @@
 <div class="partogram-list">
-<li *ngFor="let partogram of partograms; let i = index">
+<table>
+  <th>Time</th>
+  <th>View</th>
+  <th>Delete</th>
 
-  <a [routerLink]="['/partograms', partogram.labor_start_time]">
-    Partogram {{i + 1}}
-  </a>
+  <tr *ngFor="let partogram of partograms; let i = index">
 
-  <button (click)="removePartogram(partogram.labor_start_time)">Delete partogram</button>
-</li>
+    <td>{{ convertUnixDate(partogram.labor_start_time) | date:'short' }}</td>
+    <td>
+    <a [routerLink]="['/partograms', partogram.labor_start_time]">
+      Partogram {{i + 1}}
+    </a>
+    </td>
+
+    <td><button (click)="removePartogram(partogram.labor_start_time)">Delete partogram</button></td>
+  </tr>
+
+</table>
 
 
 </div>

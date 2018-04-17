@@ -64,9 +64,8 @@ export class PartogramService {
     const url = `${this.partogramURL}`;
     const signer = this.signer();
 
-    const p: Partogram = {
-      labor_start_time: (Date.now()) / 1000,
-    };
+    const p: Partogram = new Partogram();
+    p.labor_start_time =  Date.now() / 1000;
 
     const request = {
       method: 'POST',

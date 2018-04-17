@@ -29,6 +29,11 @@ export class PartogramListComponent implements OnInit {
     });
   }
 
+  convertUnixDate(t: number): Date {
+    return new Date(t * 1000);
+
+  }
+
   removePartogram(labor_start_time: number): void {
     this.partogramService.deletePartogram(labor_start_time).subscribe(r => {
       console.log('removed partogram');
