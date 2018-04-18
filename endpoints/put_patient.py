@@ -12,5 +12,7 @@ def handler(event, context):
         patient_data = repo.put_patient(identity, json.loads(event['body']))
     except ClientError as e:
         return handle_client_error(e)
+    except AttributeError as e:
+        return make_response(400, {"error": str(e)})
 
     return make_response(200, patient_data)
