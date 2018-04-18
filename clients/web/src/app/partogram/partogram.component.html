@@ -1,76 +1,62 @@
-
-
-
 <div class="row">
-
-<div class="col-md-2">
-  <table class="dilation-data-table">
-  <tr>
-    <th>
-      Dilation
-    </th>
-    <th>
-      Time
-    </th>
-    <th>
-      Remove
-    </th>
-  </tr>
-  <tr *ngFor="let m of measurements">
-    <td>{{m.dilation}} cm</td>
-    <td>{{m.time | date:'HH:mm'}}</td>
-    <td><button (click)="removeMeasurement(m.time)">Remove</button></td>
-  </tr>
-  </table>
+   <div class="col-md-2">
+      <table class="dilation-data-table">
+         <tr>
+            <th>
+               Dilation
+            </th>
+            <th>
+               Time
+            </th>
+            <th>
+               Remove
+            </th>
+         </tr>
+         <tr *ngFor="let m of measurements">
+            <td>{{m.dilation}} cm</td>
+            <td>{{m.time | date:'HH:mm'}}</td>
+            <td><button (click)="removeMeasurement(m.time)">Remove</button></td>
+         </tr>
+      </table>
+   </div>
+   <div class="col-md-7">
+      <svg />
+   </div>
+   <div class="col-md3">
+      <h3>Patient</h3>
+      <table class="patient-data-table">
+         <tr>
+            <td>Initials</td>
+            <td>{{ patient.initials || "...initials loading..." }}</td>
+         </tr>
+         <tr>
+            <td>Age</td>
+            <td>{{ patient.age || "...age loading..." }}</td>
+         </tr>
+         <tr>
+            <td>Room</td>
+            <td>{{ patient.room_number || "...rooom loading..." }}</td>
+         </tr>
+         <tr>
+            <td>Height</td>
+            <td>{{ patient.height || "...height loading..." }}</td>
+         </tr>
+         <tr>
+            <td>Weight</td>
+            <td>{{ patient.weight || "...weight loading..." }}</td>
+         </tr>
+         <tr>
+            <td>BMI</td>
+            <td>{{ getBMI() || "...bmi loading..." }}</td>
+         </tr>
+         <tr *ngIf="measurements && measurements.length > 0" >
+            <td>Status</td>
+            <td>{{ getStatus().dilation_difference || "...status loading..." }}</td>
+         </tr>
+      </table>
+      <div>
+         <button (click)="openAddMeasurementDialog()">Add Measurement</button>
+      </div>
+   </div>
 </div>
-
-<div class="col-md-7">
-  <svg />
-</div>
-
-
-
-<div class="col-md3">
-  <h3>Patient</h3>
-
-  <table class="patient-data-table">
-    <tr>
-      <td>Initials</td>
-      <td>{{ patient.initials || "...initials loading..." }}</td>
-    </tr>
-    <tr>
-      <td>Age</td>
-      <td>{{ patient.age || "...age loading..." }}</td>
-    </tr>
-    <tr>
-      <td>Room</td>
-      <td>{{ patient.room_number || "...rooom loading..." }}</td>
-    </tr>
-    <tr>
-      <td>Height</td>
-      <td>{{ patient.height || "...height loading..." }}</td>
-    </tr>
-    <tr>
-      <td>Weight</td>
-      <td>{{ patient.weight || "...weight loading..." }}</td>
-    </tr>
-    <tr>
-      <td>BMI</td>
-      <td>{{ getBMI() || "...bmi loading..." }}</td>
-    </tr>
-    <tr *ngIf="measurements && measurements.length > 0" >
-      <td>Status</td>
-      <td>{{ getStatus().dilation_difference || "...status loading..." }}</td>
-    </tr>
-  </table>
-  <div>
-    <button (click)="openAddMeasurementDialog()">Add Measurement</button>
-  </div>
-</div>
-
-
-
-
-
- <!--<button (click)="saveSvg()">Download Partogram</button>-->
-</div>
+<!-- <button (click)="saveSvg()">Download Partogram</button> -->
