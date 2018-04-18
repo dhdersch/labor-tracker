@@ -20,6 +20,7 @@ import { PartogramListComponent } from './partogram-list/partogram-list.componen
 import {PartogramComponent} from './partogram/partogram.component';
 import { AddMeasurementComponent } from './add-measurement/add-measurement.component';
 import {MatDialogModule} from '@angular/material';
+import { AddPartogramComponent } from './add-partogram/add-partogram.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {MatDialogModule} from '@angular/material';
     PartogramListComponent,
     PartogramComponent,
     AddMeasurementComponent,
+    AddPartogramComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,6 +46,6 @@ import {MatDialogModule} from '@angular/material';
   ],
   providers: [D3Service, PatientService, PartogramService, AuthService, MatDialogModule],
   bootstrap: [AppComponent],
-  entryComponents: [AddMeasurementComponent],
+  entryComponents: [AddMeasurementComponent, AddPartogramComponent],
 })
 export class AppModule { }

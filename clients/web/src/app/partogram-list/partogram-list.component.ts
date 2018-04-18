@@ -2,6 +2,9 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import {AfterViewInit} from '@angular/core';
 import {PartogramService} from '../partogram.service';
 import {Partogram} from '../partogram';
+import {AddMeasurementComponent} from '../add-measurement/add-measurement.component';
+import {AddPartogramComponent} from '../add-partogram/add-partogram.component';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-partogram-list',
@@ -10,7 +13,7 @@ import {Partogram} from '../partogram';
 })
 export class PartogramListComponent implements OnInit {
   partograms: Partogram[] = [];
-  constructor(private partogramService: PartogramService) {}
+  constructor(private partogramService: PartogramService, private dialog: MatDialog) {}
 
   ngOnInit() {
     console.log('PartogramDetailComponent - ngAfterViewInit');
@@ -22,16 +25,21 @@ export class PartogramListComponent implements OnInit {
       .subscribe(partograms => this.partograms = partograms);
   }
 
-  addNewPartogram(): void {
-    this.partogramService.addPartogram().subscribe(partogram => {
-      console.log('Created new partogram', partogram);
-      this.getPartograms();
-    });
+  openAddPartogramDialog() {
+    // https://material.angular.io/components/dialog/overview
+    const dialogRef = this.dialog.open(AddPartogramComponent, {
+      height: '355px',
+      width: '525px',
+      panelClass: 'add-measurement-modal',
+      hasBackdrop: true,
+    }).afterClosed().subscribe(() =>
+      this.getPartograms()
+    );
+
   }
 
   convertUnixDate(t: number): Date {
     return new Date(t * 1000);
-
   }
 
   removePartogram(labor_start_time: number): void {

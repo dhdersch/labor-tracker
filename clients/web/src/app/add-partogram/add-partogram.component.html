@@ -1,0 +1,19 @@
+<div class="add-partogram">
+  <h3>Add Partogram</h3>
+  <table style="width:100%;margin-top:10px;">
+    <tr>
+      <td style="text-align:center;">
+        <owl-date-time-inline [(ngModel)]="labor_start_time"></owl-date-time-inline>
+      </td>
+      <td>
+        <table style="width:100%;">
+          <tr>
+            <td style="text-align:center;">
+              <button style="text-align:center;" (click)="addNewPartogram(labor_start_time)">Create Partogram!</button>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>

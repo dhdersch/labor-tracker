@@ -60,12 +60,12 @@ export class PartogramService {
   }
 
 
-  addPartogram(): Observable<Partogram> {
+  addPartogram(labor_start_time: number): Observable<Partogram> {
     const url = `${this.partogramURL}`;
     const signer = this.signer();
 
     const p: Partogram = new Partogram();
-    p.labor_start_time =  Date.now() / 1000;
+    p.labor_start_time = labor_start_time;
 
     const request = {
       method: 'POST',
