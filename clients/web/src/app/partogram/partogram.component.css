@@ -27,7 +27,7 @@ svg {
   left: 0;
 }
 
-.patient-data-table td, .dilation-data-table td, .dilation-data-table th{
+.patient-data-table td {
   padding-left: 6px;
   padding-right: 6px;
   padding-bottom: 2px;
