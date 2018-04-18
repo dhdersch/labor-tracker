@@ -49,6 +49,20 @@ class PatientRepo(object):
             'time': measurement.get('time')
         }
 
+
+    @staticmethod
+    def __validate_patient(patient):
+        if "initials" in patient and (not isinstance(patient["initials"], str) or len(patient["initials"]) > 4):
+            raise AttributeError("Invalid value for initials in patient object. Should be string of 4 or fewer characters")
+        if "age" in patient and not isinstance(patient["age"], int):
+            raise AttributeError("Invalid value for age in patient object. Should be integer")
+        if "num_past_vaginal_births" in patient and not isinstance(patient["num_past_vaginal_births"], int):
+            raise AttributeError("Invalid value for num_past_vaginal_births in patient object. Should be integer")
+        if "height" in patient and not isinstance(patient["height"], int):
+            raise AttributeError("Invalid value for height in patient object. Should be integer")
+        if "weight" in patient and not isinstance(patient["weight"], int):
+            raise AttributeError("Invalid value for weight in patient object. Should be integer")
+
     def delete_measurement(self, identity, labor_start_time, time):
         hash_key = identity + labor_start_time
         range_key = time
@@ -140,6 +154,8 @@ class PatientRepo(object):
         :param data:
         :return:
         """
+        # Validate patient object:
+        self.__validate_patient(data)
         o = self.__s3_resource.Object(self.__bucket, self.__prefix + patient_id + ".json")
         o.put(Body=json.dumps(data), ContentType="application/json")
         return data
