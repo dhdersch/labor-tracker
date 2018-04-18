@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import { Measurement } from '../measurement';
-]
+
 @Component({
   selector: 'app-measurements-table',
   templateUrl: './measurements-table.component.html',
