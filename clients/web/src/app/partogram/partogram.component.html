@@ -18,6 +18,9 @@
             <td><button (click)="removeMeasurement(m.time)">Remove</button></td>
          </tr>
       </table>
+      <div>
+            <button (click)="openAddMeasurementDialog()">Add Measurement</button>
+         </div>
    </div>
    <div class="col-md-7">
       <svg />
@@ -55,8 +58,5 @@
             <td>{{ getStatus().dilation_difference || "...status loading..." }}</td>
          </tr>
       </table>
-      <div>
-         <button (click)="openAddMeasurementDialog()">Add Measurement</button>
-      </div>
    </div>
 </div>
