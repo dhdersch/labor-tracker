@@ -13,9 +13,14 @@ export class MeasurementsTableComponent implements OnInit {
   @Input() test: string;
   constructor() {}
   @Output() removeMeasurement = new EventEmitter<Date>();
+  @Output() openAddMeasurementDialog = new EventEmitter();
 
   removeMeasurementClicked(measurementTime) {
     this.removeMeasurement.emit(measurementTime);
+  }
+
+  openMeasurementDialogClicked() {
+    this.openAddMeasurementDialog.emit();
   }
 
   ngOnChanges(changes: SimpleChanges) {

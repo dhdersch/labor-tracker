@@ -1,27 +1,27 @@
-<div class="col-md-2">
-  <p>this is the measurement-table</p>
-  <table>
-    <tr>
-      <th>
-        Dilation
-      </th>
-      <th>
-        Time
-      </th>
-      <th>
-        Remove
-      </th>
-    </tr>
-    <tr *ngFor="let m of measurements">
-      <td>{{m.dilation}}</td>
-      <td>{{m.time | date:'HH:mm'}}</td>
-      <td>
-        <button (click)="removeMeasurementClicked(m.time)">Remove</button>
-      </td>
-    </tr>
-  </table>
-</div>
-
-<div class="col-md-7">
-  <svg />
+<table>
+  <tr>
+    <th>
+      Dilation
+    </th>
+    <th>
+      Time
+    </th>
+    <th>
+      Remove
+    </th>
+  </tr>
+  <tr *ngFor="let m of measurements">
+    <td>{{m.dilation}} cm</td>
+    <td>{{m.time | date:'HH:mm'}}</td>
+    <td class="remove-button">
+      <button class="fill-cell" (click)="removeMeasurementClicked(m.time)">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      </button>
+    </td>
+  </tr>
+</table>
+<div class="add-button">
+  <button (click)="openMeasurementDialogClicked()">Add Measurement
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+  </button>
 </div>
