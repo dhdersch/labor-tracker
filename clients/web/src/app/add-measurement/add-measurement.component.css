@@ -1,3 +1,7 @@
+#dilation-input {
+  width: 2.5rem;
+}
+
 .dilation-form {
   margin: auto;
 }
@@ -9,4 +13,17 @@
 
 .header {
   margin-bottom: 1.5rem;
+}
+
+.inline {
+  display: inline-flex;
+}
+
+.dilation-label {
+  margin-right: 0.5rem !important;
+  font-size: initial;
+}
+
+.center-form {
+  margin-left: 3rem;
 }

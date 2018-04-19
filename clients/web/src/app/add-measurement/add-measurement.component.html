@@ -2,14 +2,21 @@
 	<h3 class="header">Add Measurement</h3>
 	<div class="row">
 		<div class="col-md-6">
-			<owl-date-time-inline hour12Timer="true" [(ngModel)]=" newMeasurement.time "></owl-date-time-inline>
+			<owl-date-time-inline hour12Timer="true" [(ngModel)]=" newMeasurement.time"></owl-date-time-inline>
 		</div>
-		<div class="col-md-6 dilation-form ">
+		<div class="col-md-6 dilation-form">
 			<div>
-				<label>Dilation (cm):</label>
-				<input [(ngModel)]="newMeasurement.dilation " placeholder="Dilation ">
+				<form class="form-inline center-form">
+					<div class="form-group">
+						<label for="dilation" class="dilation-label">Dilation: </label>
+						<div class="input-group inline">
+							<input type="text" class="form-control" id="dilation-input" [(ngModel)]="newMeasurement.dilation" placeholder="0">
+							<div class="input-group-addon">cm</div>
+						</div>
+					</div>
+				</form>
 			</div>
-			<button class="add-measurement-button btn btn-primary btn-lg" (click)="addNewMeasurement() ">Add!</button>
+			<button class="add-measurement-button btn btn-primary btn-lg" (click)="addNewMeasurement()">Add!</button>
 		</div>
 	</div>
 </div>
