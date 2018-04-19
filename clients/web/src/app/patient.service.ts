@@ -60,7 +60,7 @@ export class PatientService {
       headers: new HttpHeaders(signed)
     };
 
-    return this.http.get(url, options);
+    return this.http.get<void>(url, options);
   }
 
   removeTrustedProvider(provider_id: string): Observable<void> {
@@ -81,10 +81,10 @@ export class PatientService {
       headers: new HttpHeaders(signed)
     };
 
-    return this.http.delete(url, options);
+    return this.http.delete<void>(url, options);
   }
 
-  listTrustedProviders(): Observable<void> {
+  listTrustedProviders(): Observable<Provider[]> {
     const url = `${this.patientUrl}/providers`;
     const signer = this.signer();
     const request = {
