@@ -36,7 +36,7 @@
       </tr>
       <tr *ngIf="measurements && measurements.length > 0">
         <td>Status</td>
-        <td>{{ getStatus().dilation_difference || "...status loading..." }}</td>
+        <td>{{ getStatus().message || "...status loading..." }}</td>
       </tr>
     </table>
   </div>

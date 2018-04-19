@@ -197,7 +197,7 @@ export class PartogramComponent implements OnInit {
       'dilation_difference': dilation_difference,
       'elapsed_hours': elapsed_hours,
       'typical_dilation': point.dilation,
-      'message': 'tbd-call function to decide',
+      'message': dilation_difference > 0 ? 'OK' : 'WARN',
     };
   }
 
