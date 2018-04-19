@@ -22,6 +22,7 @@ import { MeasurementsTableComponent } from './measurements-table/measurements-ta
 import { AddMeasurementComponent } from './add-measurement/add-measurement.component';
 import { MatDialogModule } from '@angular/material';
 import { AddPartogramComponent } from './add-partogram/add-partogram.component';
+import { TrustedProvidersListComponent } from './trusted-providers-list/trusted-providers-list.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AddPartogramComponent } from './add-partogram/add-partogram.component';
     PartogramComponent,
     AddMeasurementComponent,
     MeasurementsTableComponent,
-    AddPartogramComponent
+    AddPartogramComponent,
+    TrustedProvidersListComponent
   ],
   imports: [
     BrowserModule,

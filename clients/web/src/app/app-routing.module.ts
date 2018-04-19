@@ -8,9 +8,17 @@ import {PatientDetailComponent} from './patient-detail/patient-detail.component'
 import {PartogramListComponent} from './partogram-list/partogram-list.component';
 import {AuthGuard} from './auth.guard';
 import {PartogramComponent} from './partogram/partogram.component';
+import {TrustedProvidersListComponent} from './trusted-providers-list/trusted-providers-list.component';
 
 
 const routes: Routes = [
+  {
+    path: 'providers',
+    component: TrustedProvidersListComponent,
+    canActivate: [
+      AuthGuard,
+    ]
+  },
   {
     path: 'patient',
     component: PatientDetailComponent,

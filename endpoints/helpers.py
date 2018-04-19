@@ -42,6 +42,10 @@ def parse_identity(event):
     return identity
 
 
+def parse_provider_id(event):
+    return event.get('pathParameters', {}).get("provider_id", None)
+
+
 class DecimalEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, decimal.Decimal):

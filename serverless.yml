@@ -44,6 +44,86 @@ package:
     - venv/**
 
 functions:
+
+  list_trusted_providers:
+    handler: endpoints/list_trusted_providers.handler
+    events:
+    - http:
+        authorizer: aws_iam
+        path: patient/providers
+        method: get
+        cors:
+          origin: '*'
+          allowCredentials: false
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
+
+  remove_trusted_provider:
+    handler: endpoints/remove_trusted_provider.handler
+    events:
+    - http:
+        authorizer: aws_iam
+        path: patient/providers/{provider_id}
+        method: delete
+        cors:
+          origin: '*'
+          allowCredentials: false
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
+
+  add_trusted_provider:
+    handler: endpoints/add_trusted_provider.handler
+    events:
+    - http:
+        authorizer: aws_iam
+        path: patient/providers/{provider_id}
+        method: get
+        cors:
+          origin: '*'
+          allowCredentials: false
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
+
+
   delete_partogram:
     handler: endpoints/delete_partogram.handler
     events:

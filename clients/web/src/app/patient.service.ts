@@ -9,6 +9,7 @@ import { Patient } from './patient';
 import * as AWSign from 'aws-sign-web';
 import * as AWS from 'aws-sdk';
 import {AuthService} from './auth.service';
+import {Provider} from './provider';
 
 
 const httpOptions = {
@@ -39,6 +40,78 @@ export class PatientService {
     console.log(cfg);
     return new AWSign.AwsSigner(cfg);
   }
+
+
+  addTrustedProvider(provider_id: string): Observable<void> {
+    const url = `${this.patientUrl}/providers/${provider_id}`;
+    const signer = this.signer();
+    const request = {
+      method: 'GET',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    };
+
+    const signed = signer.sign(request);
+
+    const options = {
+      headers: new HttpHeaders(signed)
+    };
+
+    return this.http.get(url, options);
+  }
+
+  removeTrustedProvider(provider_id: string): Observable<void> {
+    const url = `${this.patientUrl}/providers/${provider_id}`;
+    const signer = this.signer();
+    const request = {
+      method: 'DELETE',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    };
+
+    const signed = signer.sign(request);
+
+    const options = {
+      headers: new HttpHeaders(signed)
+    };
+
+    return this.http.delete(url, options);
+  }
+
+  listTrustedProviders(): Observable<void> {
+    const url = `${this.patientUrl}/providers`;
+    const signer = this.signer();
+    const request = {
+      method: 'GET',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    };
+
+    const signed = signer.sign(request);
+
+    const options = {
+      headers: new HttpHeaders(signed)
+    };
+
+    return this.http.get<Provider[]>(url, options).pipe(
+      tap(s => {
+        console.log(s);
+      }),
+      map(response => {
+        return response['trusted_providers'];
+      })
+    );
+  }
+
 
 
 

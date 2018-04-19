@@ -17,6 +17,31 @@ class PatientRepo(object):
         self.__partograms_table = kwargs.get('partograms_table')
         self.__provider_map_table = kwargs.get('provider_map_table')
 
+    def remove_trusted_provider(self, patient_id, provider_id):
+        kwargs = {
+            'Key': {
+                'patient_id': patient_id,
+                'provider_id': provider_id
+            }
+        }
+        self.__provider_map_table.delete_item(**kwargs)
+
+    def get_trusted_providers(self, patient_id):
+        kwargs = {
+            'Select': 'ALL_ATTRIBUTES',
+            'ConsistentRead': False,
+            'KeyConditionExpression': Key("patient_id").eq(patient_id),
+            'IndexName': 'gsi'
+        }
+        items = self.__provider_map_table.query(**kwargs)['Items']
+        return items
+
+    def add_trusted_provider(self, patient_id, provider_id):
+        self.__provider_map_table.put_item(Item={
+            "patient_id": patient_id,
+            "provider_id": provider_id
+        })
+
     def check_provider_has_patient_permissions(self, provider_id, patient_id):
         patients = self.get_patients_for_provider(provider_id)
         return patient_id in patients
