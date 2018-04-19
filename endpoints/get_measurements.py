@@ -9,10 +9,9 @@ def handler(event, context):
     partogram_id = parse_partogram_id(event)
 
     try:
-        measurements = repo.get_measurements(identity, partogram_id)
+        measurements = repo.get_measurements(partogram_id)
     except ClientError as e:
         return handle_client_error(e)
-
 
     return make_response(200, {
         'measurements': measurements

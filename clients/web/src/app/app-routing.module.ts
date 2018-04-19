@@ -34,7 +34,7 @@ const routes: Routes = [
     component: LogoutComponent
   },
   {
-    path: 'partograms/:labor_start_time',
+    path: 'partograms/:partogram_id',
     component: PartogramComponent,
     canActivate: [
       AuthGuard,

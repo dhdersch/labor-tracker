@@ -12,7 +12,7 @@ def handler(event, context):
     time = parse_time(event)
 
     try:
-        repo.delete_measurement(identity, partogram_id, time)
+        repo.delete_measurement(partogram_id, time)
     except ClientError as e:
         return handle_client_error(e)
 

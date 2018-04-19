@@ -10,17 +10,16 @@ def make_repo():
     resource = boto3.resource('s3')
     prefix = "users/"
 
-    # providers_table = boto3.resource('dynamodb').Table(os.environ.get("PROVIDERS_TABLE"))
     partograms_table = boto3.resource('dynamodb').Table(os.environ.get("PARTOGRAMS_TABLE"))
     measurements_table = boto3.resource('dynamodb').Table(os.environ.get("MEASUREMENTS_TABLE"))
-
+    provider_map_table = boto3.resource('dynamodb').Table(os.environ.get("PROVIDER_MAP_TABLE"))
     kwargs = {
         's3': resource,
         'bucket': bucket,
         'prefix': prefix,
         'measurements_table': measurements_table,
         'partograms_table': partograms_table,
-        # 'providers_table': providers_table
+        'provider_map_table': provider_map_table,
     }
 
     repo = PatientRepo(**kwargs)

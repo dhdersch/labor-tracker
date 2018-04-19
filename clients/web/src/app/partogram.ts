@@ -1,4 +1,6 @@
 export class Partogram {
+  partogram_id: string;
+  patient_id: string;
   labor_start_time: number;
 
   public getDate(): Date {

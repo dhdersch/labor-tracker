@@ -12,7 +12,7 @@ def handler(event, context):
     measurement = json.loads(event['body'])
 
     try:
-        repo.add_measurement(identity, partogram_id, measurement)
+        repo.add_measurement(partogram_id, measurement)
     except ClientError as e:
         return handle_client_error(e)
 

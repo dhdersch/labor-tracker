@@ -8,12 +8,12 @@
 
     <td>{{ convertUnixDate(partogram.labor_start_time) | date:'short' }}</td>
     <td>
-    <button [routerLink]="['/partograms', partogram.labor_start_time]">
+    <button [routerLink]="['/partograms', partogram.partogram_id]">
       Partogram #{{i + 1}}
     </button>
     </td>
 
-    <td><button (click)="removePartogram(partogram.labor_start_time)">Delete partogram</button></td>
+    <td><button (click)="removePartogram(partogram.partogram_id)">Delete partogram</button></td>
   </tr>
 
 </table>

@@ -14,12 +14,12 @@ import {PartogramService} from '../partogram.service';
 export class AddMeasurementComponent implements OnInit {
 
   newMeasurement = new Measurement();
-  labor_start_time: string;
+  partogram_id: string;
 
   constructor(
     private dialogRef: MatDialogRef<AddMeasurementComponent>,
     @Inject(MAT_DIALOG_DATA) data, private partogramService: PartogramService) {
-      this.labor_start_time = data.labor_start_time;
+      this.partogram_id = data.partogram_id;
     }
 
   ngOnInit() {
@@ -40,7 +40,7 @@ export class AddMeasurementComponent implements OnInit {
       return;
     }
 
-    const sub = this.partogramService.addMeasurement(this.labor_start_time, +this.newMeasurement.dilation, this.newMeasurement.time)
+    const sub = this.partogramService.addMeasurement(this.partogram_id, +this.newMeasurement.dilation, this.newMeasurement.time)
       .subscribe(r => {
           // this.getMeasurements();
           this.newMeasurement = new Measurement();
@@ -55,7 +55,7 @@ export class AddMeasurementComponent implements OnInit {
     if (dilation > 11 || dilation < 0) {
       return 'Dilation must be a number between 0 and 11';
     }
-    if (dilation === undefined || dilation == null){
+    if (dilation === undefined || dilation == null) {
       return 'A dilation value between 0 and 11 must be provided';
     }
     return null;

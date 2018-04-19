@@ -42,8 +42,8 @@ export class PartogramListComponent implements OnInit {
     return new Date(t * 1000);
   }
 
-  removePartogram(labor_start_time: number): void {
-    this.partogramService.deletePartogram(labor_start_time).subscribe(r => {
+  removePartogram(partogram_id: string): void {
+    this.partogramService.deletePartogram(partogram_id).subscribe(r => {
       console.log('removed partogram');
       this.getPartograms();
     });

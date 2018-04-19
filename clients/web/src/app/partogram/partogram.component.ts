@@ -24,7 +24,7 @@ export class PartogramComponent implements OnInit {
 
   patient: Patient = new Patient();
 
-  labor_start_time: number;
+  partogram_id: string;
   partogram: Partogram;
   measurements: Measurement[];
   constructor(
@@ -47,7 +47,7 @@ export class PartogramComponent implements OnInit {
       panelClass: 'add-measurement-modal',
       hasBackdrop: true,
       data: {
-        labor_start_time: this.labor_start_time,
+        partogram_id: this.partogram_id,
       }
     }).afterClosed().subscribe(() =>
       this.getMeasurements()
@@ -63,8 +63,8 @@ export class PartogramComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.labor_start_time = params['labor_start_time'];
-      this.partogramService.getPartogram(this.labor_start_time).subscribe(partogram => {
+      this.partogram_id = params['partogram_id'];
+      this.partogramService.getPartogram(this.partogram_id).subscribe(partogram => {
         this.partogram = partogram;
         this.getMeasurements();
       });
@@ -73,7 +73,7 @@ export class PartogramComponent implements OnInit {
   }
 
   getMeasurements(): void {
-    this.partogramService.getMeasurements(this.labor_start_time).subscribe(measurements => {
+    this.partogramService.getMeasurements(this.partogram_id).subscribe(measurements => {
       this.measurements = measurements;
       this.render(this.measurements);
     });
@@ -94,7 +94,7 @@ export class PartogramComponent implements OnInit {
 
   removeMeasurement(measurementTime: Date): void {
     console.log('removing measurement with time', measurementTime.getTime() / 1000);
-    const sub = this.partogramService.deleteMeasurement(this.labor_start_time, measurementTime.getTime() / 1000)
+    const sub = this.partogramService.deleteMeasurement(this.partogram_id, measurementTime.getTime() / 1000)
       .subscribe(r => {
         this.getMeasurements();
         sub.unsubscribe();

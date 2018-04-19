@@ -9,10 +9,10 @@ provider:
     name: labor-tracker
     serverSideEncryption: AES256
   environment:
-    PROVIDERS_TABLE: providermap-${self:custom.stage}
-    PARTOGRAMS_TABLE: partograms-${self:custom.stage}
+    PROVIDER_MAP_TABLE: providermap-${self:custom.stage}
+    PARTOGRAMS_TABLE: partograms2-${self:custom.stage}
     BUCKET: labor-tracker
-    MEASUREMENTS_TABLE: measurements-${self:custom.stage}
+    MEASUREMENTS_TABLE: measurements2-${self:custom.stage}
   profile: ${opt:profile}
   iamRoleStatements:
     - Effect: Allow
@@ -23,10 +23,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource:
-        - { "Fn::GetAtt": ["Measurements", "Arn" ] }
-#        - { "Fn::GetAtt": ["ProviderMap", "Arn" ] }
-        - { "Fn::GetAtt": ["Partograms", "Arn" ] }
+      Resource: "*"
     - Effect: Allow
       Action: "s3:*"
       Resource: "arn:aws:s3:::labor-tracker/users/*"
@@ -312,14 +309,14 @@ resources:
     Measurements:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: measurements-${self:custom.stage}
+        TableName: measurements2-${self:custom.stage}
         AttributeDefinitions:
-          - AttributeName: key
+          - AttributeName: partogram_id
             AttributeType: S
           - AttributeName: time
             AttributeType: N
         KeySchema:
-          - AttributeName: key
+          - AttributeName: partogram_id
             KeyType: HASH
           - AttributeName: time
             KeyType: RANGE
@@ -329,48 +326,60 @@ resources:
     Partograms:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: partograms-${self:custom.stage}
+        TableName: partograms2-${self:custom.stage}
         AttributeDefinitions:
+          - AttributeName: partogram_id
+            AttributeType: S
           - AttributeName: patient_id
             AttributeType: S
           - AttributeName: labor_start_time
             AttributeType: N
         KeySchema:
+          - AttributeName: partogram_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+        - IndexName: gsi
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+          KeySchema:
           - AttributeName: patient_id
             KeyType: HASH
           - AttributeName: labor_start_time
             KeyType: RANGE
+
+    ProviderMap:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: providermap-${self:custom.stage}
+        AttributeDefinitions:
+          - AttributeName: provider_id
+            AttributeType: S
+          - AttributeName: patient_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: provider_id
+            KeyType: HASH
+          - AttributeName: patient_id
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-
-#    ProviderMap:
-#      Type: AWS::DynamoDB::Table
-#      Properties:
-#        TableName: providermap-${self:custom.stage}
-#        AttributeDefinitions:
-#          - AttributeName: provider_id
-#            AttributeType: S
-#          - AttributeName: patient_id
-#            AttributeType: S
-#        KeySchema:
-#          - AttributeName: provider_id
-#            KeyType: HASH
-#          - AttributeName: user_id
-#            KeyType: RANGE
-#        ProvisionedThroughput:
-#          ReadCapacityUnits: 1
-#          WriteCapacityUnits: 1
-#        LocalSecondaryIndexes:
-#        - IndexName: gsi
-#          Projection:
-#            ProjectionType: ALL
-#          ProvisionedThroughput:
-#            ReadCapacityUnits: 1
-#            WriteCapacityUnits: 1
-#          KeySchema:
-#          - AttributeName: user_id
-#            KeyType: HASH
-#          - AttributeName: provider_id
-#            KeyType: RANGE
+        GlobalSecondaryIndexes:
+        - IndexName: gsi
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+          KeySchema:
+          - AttributeName: patient_id
+            KeyType: HASH
+          - AttributeName: provider_id
+            KeyType: RANGE
 
