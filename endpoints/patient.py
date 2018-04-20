@@ -176,6 +176,7 @@ class PatientRepo(object):
         o = self.__s3_resource.Object(self.__bucket, self.__prefix + patient_id + ".json")
         response = o.get(ResponseContentType="application/json")
         data = json.loads(response['Body'].read().decode("utf-8"))
+        data['id'] = patient_id
         return data
 
     def put_patient(self, patient_id, data):
@@ -187,6 +188,7 @@ class PatientRepo(object):
         """
         # Validate patient object:
         self.__validate_patient(data)
+        data['id'] = patient_id
         o = self.__s3_resource.Object(self.__bucket, self.__prefix + patient_id + ".json")
         o.put(Body=json.dumps(data), ContentType="application/json")
         return data
