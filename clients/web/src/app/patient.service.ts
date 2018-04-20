@@ -37,7 +37,7 @@ export class PatientService {
       sessionToken: AWS.config.credentials.sessionToken,
     };
 
-    console.log(cfg);
+    // console.log(cfg);
     return new AWSign.AwsSigner(cfg);
   }
 
@@ -161,7 +161,7 @@ export class PatientService {
     }else if (!Number.isInteger(parseInt(patient.weight.toString(), 10))) {
       alert('Invalid weight provided');
       return;
-    }else{
+    }else {
       patient.weight = parseInt(patient.weight.toString(), 10);
     }
     console.log(patient);

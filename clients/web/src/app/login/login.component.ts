@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
     const r = this.router;
     const zone = this.zone;
     r_var.get(function(err) {
-      console.log(AWS.config.credentials);
+      // console.log(AWS.config.credentials);
 
       const item = {
         'accessKeyId': AWS.config.credentials.accessKeyId,

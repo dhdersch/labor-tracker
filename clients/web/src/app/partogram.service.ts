@@ -35,7 +35,7 @@ export class PartogramService {
       sessionToken: AWS.config.credentials.sessionToken,
     };
 
-    console.log(cfg);
+    // console.log(cfg);
     return new AWSign.AwsSigner(cfg);
   }
 

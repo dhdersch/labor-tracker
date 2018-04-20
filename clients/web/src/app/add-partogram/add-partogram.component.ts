@@ -11,6 +11,7 @@ import {AddMeasurementComponent} from '../add-measurement/add-measurement.compon
 export class AddPartogramComponent implements OnInit {
   labor_start_time: Date = null;
   patient_initials: string;
+  patient_room: string;
 
   constructor(
     private dialogRef: MatDialogRef<AddMeasurementComponent>,

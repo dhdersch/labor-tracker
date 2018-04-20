@@ -56,7 +56,7 @@ export class PartogramComponent implements OnInit {
   }
 
   getPatientDetails(patient_id: string) {
-    this.patientService.getPatient(patient_id).subscribe(patient => {
+    return this.patientService.getPatient(patient_id).subscribe(patient => {
       this.patient = patient;
     });
   }
@@ -66,8 +66,10 @@ export class PartogramComponent implements OnInit {
       this.partogram_id = params['partogram_id'];
       this.partogramService.getPartogram(this.partogram_id).subscribe(partogram => {
         this.partogram = partogram;
-        this.getMeasurements();
-        this.getPatientDetails(partogram.patient_id);
+        this.patientService.getPatient(partogram.patient_id).subscribe((p) => {
+          this.patient = p;
+          this.getMeasurements();
+        });
       });
     });
 
@@ -125,18 +127,27 @@ export class PartogramComponent implements OnInit {
 
     console.log('measurements sort', measurements);
 
-    measurements.sort(this.compareTime);
+    const dp = this.getDystociaByBmi(this.getBMI());
 
-    console.log(measurements);
 
-    const minMeasurementTime = measurements[0].time;
-    const minMeasurementDilation = Math.min(...measurements.map(o => o.dilation));
-    const maxMeasurementTime = measurements[measurements.length - 1].time;
-    const maxMeasurementDilation = Math.max(...measurements.map(o => o.dilation));
+    const dyst_measurements = this.convertDpToMeasurement(new Date(this.partogram.labor_start_time * 1000), dp);
 
-    const timeScale = d3.scaleTime().domain([minMeasurementTime, maxMeasurementTime]).range([0, width - margin.left]);
-    const dilationScale = d3.scaleLinear().domain([minMeasurementDilation, maxMeasurementDilation]).range([height - margin.top, 0]);
+    const all_measurements = measurements.concat(dyst_measurements);
+
+    all_measurements.sort(this.compareTime);
+
+    const timeExtent = d3.extent(all_measurements, (m) => m.time );
+    const minMeasurementTime = timeExtent[0];
+    const maxMeasurementTime = timeExtent[1];
+
+    const dilationExtent = d3.extent(all_measurements, (m) => m.dilation );
+    const minMeasurementDilation = dilationExtent[0];
+    const maxMeasurementDilation = dilationExtent[1];
+
+    const timeScale = d3.scaleTime().domain(timeExtent).range([0, width - margin.left]);
+    const dilationScale = d3.scaleLinear().domain(dilationExtent).range([height - margin.top, 0]);
     const time_range = (maxMeasurementTime.getTime() - minMeasurementTime.getTime());
+
     const time_width = {};
     for (let i = 1; i < measurements.length; i++) {
       time_width[measurements[i - 1].time.getTime()] =
@@ -168,23 +179,40 @@ export class PartogramComponent implements OnInit {
       .style('text-anchor', 'end')
       .text('Value');
 
-    svg
-      .selectAll('bar')
+    // Add the scatterplot
+    svg.selectAll('dot')
       .data(measurements)
-      .enter()
-      .append('rect')
-      .style('fill', 'steelblue')
-      .attr('x', function(d) {
+      .enter().append('circle')
+      .attr('r', 3.5)
+      .attr('cx', (d: Measurement) => {
         return timeScale(d.time);
       })
-      .attr('width', function(d) {
-        return time_width[d.time.getTime()];
+      .attr('cy', (d: Measurement) => {
+        return dilationScale(d.dilation);
+      });
+
+    svg
+      .selectAll('bar')
+      .data(dyst_measurements)
+      .enter()
+      .append('rect')
+      .style('fill', 'red')
+      .style('opacity', '0.2')
+      .attr('x', (d: Measurement) => {
+        console.log('bar x', d.time);
+        return timeScale(d.time);
       })
-      .attr('y', function(d) {
+      .attr('width', (d: Measurement) => {
+        // const w = time_width[d.time.getTime()];
+        // console.log('bar width', w);
+        return 50;
+      })
+      .attr('y', (d: Measurement) => {
         return dilationScale(d.dilation);
       })
-      .attr('height', function(d) {
-        return height - dilationScale(d.dilation);
+      .attr('height', (d: Measurement) => {
+        const pixels = height - dilationScale(d.dilation);
+        return  pixels;
       });
   }
 
@@ -202,7 +230,19 @@ export class PartogramComponent implements OnInit {
     };
   }
 
+  convertDpToMeasurement(start_time: Date, bp: DataPoints): Measurement[] {
+    const dp_measurements: Measurement[] = [];
+    for (const bp_val of bp.values){
+      const m = new Measurement();
+      m.time = new Date(start_time.getTime() + (bp_val.hours * 60 * 60 * 1000));
+      m.dilation = bp_val.dilation;
+      dp_measurements.push(m);
+    }
+    return dp_measurements;
+  }
+
   getDystociaByBmi(bmi: number): DataPoints {
+    console.log('getting dyst values for bmi', bmi)
     const currentBmi = bmi;
     if (currentBmi < 25) {
       return new DataPoints(

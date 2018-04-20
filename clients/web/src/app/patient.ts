@@ -17,13 +17,13 @@ export class DataPoints {
 
   public match(num: number): Point {
     const rounded_num = Math.round(num);
-    if (rounded_num <5 ){
+    if (rounded_num < 5 ) {
         return this.values[0];
-    } else if (rounded_num > 10){
-        return this.values[this.values.length-1];
+    } else if (rounded_num > 10) {
+        return this.values[this.values.length - 1];
     } else {
-        for(var point of this.values){
-          if(rounded_num == point.hours){
+        for (const point of this.values){
+          if (rounded_num === point.hours) {
             return point;
           }
         }
