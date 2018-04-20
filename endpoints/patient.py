@@ -74,7 +74,7 @@ class PatientRepo(object):
             self.__measurements_table.delete_item(**kwargs)
 
         self.__partograms_table.delete_item(Key={
-            'key': partogram_id,
+            'partogram_id': partogram_id,
         })
         ptime.sleep(0.2)
 

@@ -4,12 +4,7 @@ from endpoints.helpers import *
 repo = make_repo()
 
 
-def parse_patient_id(event):
-    query_strings = event.get('queryStringParameters')
-    if query_strings:
-        patient_id = query_strings.get('patient_id', None)
-        return patient_id
-    return None
+
 
 
 def handler(event, context):

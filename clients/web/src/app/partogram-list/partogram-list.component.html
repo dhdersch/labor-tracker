@@ -1,10 +1,14 @@
 <div class="partogram-list">
 <table class="partogram-list-table">
+  <th>Patient Initials</th>
+  <th>Room</th>
   <th>Time</th>
   <th>View</th>
   <th>Delete</th>
 
   <tr *ngFor="let partogram of partograms; let i = index">
+    <td>{{ partogram.initials || 'not available' }}</td>
+    <td>{{ partogram.room || 'not available' }}</td>
 
     <td>{{ convertUnixDate(partogram.labor_start_time) | date:'short' }}</td>
     <td>

@@ -60,12 +60,14 @@ export class PartogramService {
   }
 
 
-  addPartogram(labor_start_time: number): Observable<Partogram> {
+  addPartogram(labor_start_time: number, patient_initials?: string, patient_room?: string): Observable<Partogram> {
     const url = `${this.partogramURL}`;
     const signer = this.signer();
 
     const p: Partogram = new Partogram();
+    p.initials = patient_initials;
     p.labor_start_time = labor_start_time;
+    p.room = patient_room;
 
     const request = {
       method: 'POST',

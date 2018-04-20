@@ -10,18 +10,21 @@ import {AddMeasurementComponent} from '../add-measurement/add-measurement.compon
 })
 export class AddPartogramComponent implements OnInit {
   labor_start_time: Date = null;
+  patient_initials: string;
 
   constructor(
     private dialogRef: MatDialogRef<AddMeasurementComponent>,
     @Inject(MAT_DIALOG_DATA) data, private partogramService: PartogramService) {
     this.labor_start_time = new Date(Date.now());
+    this.patient_initials = data.patient_initials;
+    this.patient_room = data.patient_room;
   }
 
   ngOnInit() {
   }
 
   addNewPartogram(labor_start_time: Date): void {
-    this.partogramService.addPartogram(labor_start_time.getTime() / 1000).subscribe(partogram => {
+    this.partogramService.addPartogram(labor_start_time.getTime() / 1000, this.patient_initials, this.patient_room).subscribe(partogram => {
       console.log('Created new partogram', partogram);
       this.dialogRef.close();
     });

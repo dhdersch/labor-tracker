@@ -1,10 +1,10 @@
-import { Component, OnInit, NgZone } from '@angular/core';
-import {AfterViewInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {PartogramService} from '../partogram.service';
 import {Partogram} from '../partogram';
-import {AddMeasurementComponent} from '../add-measurement/add-measurement.component';
 import {AddPartogramComponent} from '../add-partogram/add-partogram.component';
 import {MatDialog} from '@angular/material';
+import {Patient} from '../patient';
+import {PatientService} from '../patient.service';
 
 @Component({
   selector: 'app-partogram-list',
@@ -13,11 +13,15 @@ import {MatDialog} from '@angular/material';
 })
 export class PartogramListComponent implements OnInit {
   partograms: Partogram[] = [];
-  constructor(private partogramService: PartogramService, private dialog: MatDialog) {}
+  patient: Patient;
+  constructor(private partogramService: PartogramService, private dialog: MatDialog, private patientService: PatientService) {}
 
   ngOnInit() {
     console.log('PartogramDetailComponent - ngAfterViewInit');
-    this.getPartograms();
+    this.patientService.getPatient().subscribe((patient) => {
+      this.patient = patient;
+      this.getPartograms();
+    });
   }
 
   getPartograms(): void {
@@ -32,6 +36,10 @@ export class PartogramListComponent implements OnInit {
       width: '525px',
       panelClass: 'add-measurement-modal',
       hasBackdrop: true,
+      data: {
+        patient_initials: this.patient.initials,
+        patient_room: this.patient.room_number,
+      },
     }).afterClosed().subscribe(() =>
       this.getPartograms()
     );

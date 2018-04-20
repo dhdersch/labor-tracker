@@ -77,3 +77,11 @@ def handle_client_error(e):
         code = 404
         msg = "Patient does not exist"
     return make_response(code, {"error": msg})
+
+
+def parse_patient_id(event):
+    query_strings = event.get('queryStringParameters')
+    if query_strings:
+        patient_id = query_strings.get('patient_id', None)
+        return patient_id
+    return None
