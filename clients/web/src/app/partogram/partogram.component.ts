@@ -149,11 +149,12 @@ export class PartogramComponent implements OnInit {
     const time_range = (maxMeasurementTime.getTime() - minMeasurementTime.getTime());
 
     const time_width = {};
-    for (let i = 1; i < measurements.length; i++) {
-      time_width[measurements[i - 1].time.getTime()] =
-        (measurements[i].time.getTime() - measurements[i - 1].time.getTime()) / time_range * width;
+    for (let i = 1; i < dyst_measurements.length; i++) {
+      time_width[dyst_measurements[i - 1].time.getTime()] =
+        (dyst_measurements[i].time.getTime() - dyst_measurements[i - 1].time.getTime()) / time_range * width;
     }
-    time_width[maxMeasurementTime.getTime()] = width;
+
+    time_width[dyst_measurements[dyst_measurements.length - 1].time.getTime()] = width;
     const xAxis = d3.axisBottom(timeScale).tickFormat(d3.timeFormat('%H:%M'));
     const yAxis = d3.axisLeft(dilationScale).ticks(10);
 
@@ -203,9 +204,9 @@ export class PartogramComponent implements OnInit {
         return timeScale(d.time);
       })
       .attr('width', (d: Measurement) => {
-        // const w = time_width[d.time.getTime()];
+        const w = time_width[d.time.getTime()];
         // console.log('bar width', w);
-        return 50;
+        return w;
       })
       .attr('y', (d: Measurement) => {
         return dilationScale(d.dilation);
