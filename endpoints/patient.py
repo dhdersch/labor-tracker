@@ -43,6 +43,8 @@ class PatientRepo(object):
         })
 
     def check_provider_has_patient_permissions(self, provider_id, patient_id):
+        if provider_id == patient_id:
+            return True
         patients = self.get_patients_for_provider(provider_id)
         return patient_id in patients
 
