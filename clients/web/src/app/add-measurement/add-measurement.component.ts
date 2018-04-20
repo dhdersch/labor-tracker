@@ -52,11 +52,11 @@ export class AddMeasurementComponent implements OnInit {
 
   validateDilation(dilation: number)  {
     console.log('Validating dilation ' + dilation);
-    if (dilation > 11 || dilation < 0) {
-      return 'Dilation must be a number between 0 and 11';
+    if (dilation > 25 || dilation < 0) {
+      return 'Dilation must be a number between 0 and 25';
     }
     if (dilation === undefined || dilation == null) {
-      return 'A dilation value between 0 and 11 must be provided';
+      return 'A dilation value between 0 and 25 must be provided';
     }
     return null;
   }
