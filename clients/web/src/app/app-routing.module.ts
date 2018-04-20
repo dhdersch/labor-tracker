@@ -13,6 +13,13 @@ import {TrustedProvidersListComponent} from './trusted-providers-list/trusted-pr
 
 const routes: Routes = [
   {
+    path: 'providers/:provider_id',
+    component: TrustedProvidersListComponent,
+    canActivate: [
+      AuthGuard,
+    ]
+  },
+  {
     path: 'providers',
     component: TrustedProvidersListComponent,
     canActivate: [

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {PatientService} from '../patient.service';
 import {Provider} from '../provider';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-trusted-providers-list',
@@ -9,11 +10,16 @@ import {Provider} from '../provider';
 })
 export class TrustedProvidersListComponent implements OnInit {
 
-  constructor(private patientService: PatientService) { }
+  constructor(private patientService: PatientService, private route: ActivatedRoute) { }
   trustedProviders: Provider[];
   newProviderId = '';
   ngOnInit() {
-    this.newProviderId = '';
+
+
+    this.route.params.subscribe(params => {
+      this.newProviderId = params['provider_id'];
+    });
+
     this.listTrustedProviders();
   }
 
