@@ -55,8 +55,8 @@ export class PartogramComponent implements OnInit {
 
   }
 
-  getPatientDetails() {
-    this.patientService.getPatient().subscribe(patient => {
+  getPatientDetails(patient_id: string) {
+    this.patientService.getPatient(patient_id).subscribe(patient => {
       this.patient = patient;
     });
   }
@@ -67,9 +67,10 @@ export class PartogramComponent implements OnInit {
       this.partogramService.getPartogram(this.partogram_id).subscribe(partogram => {
         this.partogram = partogram;
         this.getMeasurements();
+        this.getPatientDetails(partogram.patient_id);
       });
     });
-    this.getPatientDetails();
+
   }
 
   getMeasurements(): void {

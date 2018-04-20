@@ -192,8 +192,13 @@ export class PatientService {
 
 
 
-  getPatient(): Observable<Patient> {
-    const url = `${this.patientUrl}`;
+  getPatient(patient_id?: string): Observable<Patient> {
+    console.log('patient_id', patient_id);
+
+    let url = `${this.patientUrl}`;
+    if (patient_id) {
+      url += `?patient_id=${patient_id}`;
+    }
     const signer = this.signer();
     const request = {
       method: 'GET',
