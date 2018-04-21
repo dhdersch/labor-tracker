@@ -1,0 +1,26 @@
+<p>These users will be able to view and modify your partograms.</p>
+<table>
+  <tr>
+    <th>
+      Provider ID
+    </th>
+    <th>
+      Remove
+    </th>
+  </tr>
+  <tr *ngFor="let p of trustedProviders">
+    <td>{{p.provider_id}}</td>
+    <td class="remove-button">
+      <button class="fill-cell" (click)="removeTrustedProvider(p.provider_id)">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      </button>
+    </td>
+  </tr>
+</table>
+
+<div class="add-button">
+  <input type="text" [(ngModel)]="newProviderId"/>
+  <button (click)="addTrustedProvider()">Add Trusted Provider
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+  </button>
+</div>

@@ -1,11 +1,8 @@
-import boto3
-import os
 from botocore.exceptions import ClientError
-from endpoints.patient import PatientRepo
 from endpoints.helpers import *
 
 
-repo = PatientRepo(s3=boto3.resource('s3'), bucket=os.environ.get("BUCKET"), prefix="users/")
+repo = make_repo()
 
 
 def handler(event, context):
@@ -15,5 +12,7 @@ def handler(event, context):
         patient_data = repo.put_patient(identity, json.loads(event['body']))
     except ClientError as e:
         return handle_client_error(e)
+    except AttributeError as e:
+        return make_response(400, {"error": str(e)})
 
     return make_response(200, patient_data)

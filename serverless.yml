@@ -9,21 +9,21 @@ provider:
     name: labor-tracker
     serverSideEncryption: AES256
   environment:
-    PATIENTS_TABLE: patients-${self:custom.stage}
-    CLINICIANS_TABLE: clinicians-${self:custom.stage}
+    PROVIDER_MAP_TABLE: providermap-${self:custom.stage}
+    PARTOGRAMS_TABLE: partograms2-${self:custom.stage}
     BUCKET: labor-tracker
+    MEASUREMENTS_TABLE: measurements2-${self:custom.stage}
   profile: ${opt:profile}
   iamRoleStatements:
-#    - Effect: Allow
-#      Action:
-#        - dynamodb:Query
-#        - dynamodb:Scan
-#        - dynamodb:GetItem
-#        - dynamodb:PutItem
-#        - dynamodb:UpdateItem
-#        - dynamodb:DeleteItem
-#      Resource:
-#        - { "Fn::GetAtt": ["Patients", "Arn" ] }
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "*"
     - Effect: Allow
       Action: "s3:*"
       Resource: "arn:aws:s3:::labor-tracker/users/*"
@@ -44,14 +44,293 @@ package:
     - venv/**
 
 functions:
+
+  list_trusted_providers:
+    handler: endpoints/list_trusted_providers.handler
+    events:
+    - http:
+        authorizer: aws_iam
+        path: patient/providers
+        method: get
+        cors:
+          origin: '*'
+          allowCredentials: false
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
+
+  remove_trusted_provider:
+    handler: endpoints/remove_trusted_provider.handler
+    events:
+    - http:
+        authorizer: aws_iam
+        path: patient/providers/{provider_id}
+        method: delete
+        cors:
+          origin: '*'
+          allowCredentials: false
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
+
+  add_trusted_provider:
+    handler: endpoints/add_trusted_provider.handler
+    events:
+    - http:
+        authorizer: aws_iam
+        path: patient/providers/{provider_id}
+        method: get
+        cors:
+          origin: '*'
+          allowCredentials: false
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
+
+
+  delete_partogram:
+    handler: endpoints/delete_partogram.handler
+    events:
+    - http:
+        authorizer: aws_iam
+        path: partograms/{partogram_id}
+        method: delete
+        cors:
+          origin: '*'
+          allowCredentials: false
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
+
+  post_partogram:
+    handler: endpoints/post_partogram.handler
+    events:
+      - http:
+          path: partograms
+          method: post
+          authorizer: aws_iam
+          cors:
+            origin: '*'
+            allowCredentials: false
+            headers:
+              - Content-Type
+              - content-type
+              - X-Amz-Date
+              - x-amz-date
+              - Authorization
+              - authorization
+              - X-Api-Key
+              - x-api-key
+              - X-Amz-Security-Token
+              - x-amz-security-token
+              - X-Amz-User-Agent
+              - x-amz-user-agent
+              - accept
+              - Accept
+
+  get_partogram:
+    handler: endpoints/get_partogram.handler
+    events:
+      - http:
+          authorizer: aws_iam
+          path: partograms/{partogram_id}
+          method: get
+          cors:
+            allowCredentials: false
+            origin: '*'
+            headers:
+              - Content-Type
+              - content-type
+              - X-Amz-Date
+              - x-amz-date
+              - Authorization
+              - authorization
+              - X-Api-Key
+              - x-api-key
+              - X-Amz-Security-Token
+              - x-amz-security-token
+              - X-Amz-User-Agent
+              - x-amz-user-agent
+              - accept
+              - Accept
+
+  get_measurements:
+    handler: endpoints/get_measurements.handler
+    events:
+    - http:
+        authorizer: aws_iam
+        path: partograms/{partogram_id}/measurements
+        method: get
+        cors:
+          origin: '*'
+          allowCredentials: false
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
+
+  delete_measurement:
+    handler: endpoints/delete_measurement.handler
+    events:
+    - http:
+        path: partograms/{partogram_id}/measurements/{time}
+        method: delete
+        authorizer: aws_iam
+        cors:
+          origin: '*'
+          allowCredentials: false
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
+
+  post_measurement:
+    handler: endpoints/post_measurement.handler
+    events:
+    - http:
+        authorizer: aws_iam
+        path: partograms/{partogram_id}/measurements
+        method: post
+        cors:
+          allowCredentials: false
+          origin: '*'
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
+
+  list_partograms:
+    handler: endpoints/list_partograms.handler
+    events:
+    - http:
+        authorizer: aws_iam
+        path: partograms
+        method: get
+        cors:
+          allowCredentials: false
+          origin: '*'
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
+
   get_patient:
     handler: endpoints/get_patient.handler
     events:
     - http:
+        authorizer: aws_iam
         path: patient
         method: get
-        cors: true
-        authorizer: aws_iam
+        cors:
+          allowCredentials: false
+          origin: '*'
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
 
   update_patient:
     handler: endpoints/update_patient.handler
@@ -59,43 +338,128 @@ functions:
     - http:
         path: patient/update
         method: put
-        cors: true
         authorizer: aws_iam
+        cors:
+          allowCredentials: false
+          origin: '*'
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
 
   put_patient:
     handler: endpoints/put_patient.handler
     events:
     - http:
+        authorizer: aws_iam
         path: patient
         method: put
-        cors: true
-        authorizer: aws_iam
+        cors:
+          allowCredentials: false
+          origin: '*'
+          headers:
+            - Content-Type
+            - content-type
+            - X-Amz-Date
+            - x-amz-date
+            - Authorization
+            - authorization
+            - X-Api-Key
+            - x-api-key
+            - X-Amz-Security-Token
+            - x-amz-security-token
+            - X-Amz-User-Agent
+            - x-amz-user-agent
+            - accept
+            - Accept
 
-#resources:
-#  Resources:
-#    Patients:
-#      Type: AWS::DynamoDB::Table
-#      Properties:
-#        TableName: patients-${self:custom.stage}
-#        AttributeDefinitions:
-#          - AttributeName: key
-#            AttributeType: S
-#        KeySchema:
-#          - AttributeName: key
-#            KeyType: HASH
-#        ProvisionedThroughput:
-#          ReadCapacityUnits: 1
-#          WriteCapacityUnits: 1
-    # Clinicians:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #     TableName: clinicians-${self:custom.stage}
-    #     AttributeDefinitions:
-    #       - AttributeName: key
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: key
-    #         KeyType: HASH
-    #     ProvisionedThroughput:
-    #       ReadCapacityUnits: 1
-    #       WriteCapacityUnits: 1
+resources:
+  Resources:
+    Measurements:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: measurements2-${self:custom.stage}
+        AttributeDefinitions:
+          - AttributeName: partogram_id
+            AttributeType: S
+          - AttributeName: time
+            AttributeType: N
+        KeySchema:
+          - AttributeName: partogram_id
+            KeyType: HASH
+          - AttributeName: time
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    Partograms:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: partograms2-${self:custom.stage}
+        AttributeDefinitions:
+          - AttributeName: partogram_id
+            AttributeType: S
+          - AttributeName: patient_id
+            AttributeType: S
+          - AttributeName: labor_start_time
+            AttributeType: N
+        KeySchema:
+          - AttributeName: partogram_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+        - IndexName: gsi
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+          KeySchema:
+          - AttributeName: patient_id
+            KeyType: HASH
+          - AttributeName: labor_start_time
+            KeyType: RANGE
+
+    ProviderMap:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: providermap-${self:custom.stage}
+        AttributeDefinitions:
+          - AttributeName: provider_id
+            AttributeType: S
+          - AttributeName: patient_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: provider_id
+            KeyType: HASH
+          - AttributeName: patient_id
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+        - IndexName: gsi
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+          KeySchema:
+          - AttributeName: patient_id
+            KeyType: HASH
+          - AttributeName: provider_id
+            KeyType: RANGE
+

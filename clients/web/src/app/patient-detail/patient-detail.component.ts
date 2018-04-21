@@ -1,6 +1,7 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import {Component, OnInit, NgZone, Inject} from '@angular/core';
 import {PatientService} from '../patient.service';
 import {Patient} from '../patient';
+import {DOCUMENT, Location} from '@angular/common';
 
 @Component({
   selector: 'app-patient-detail',
@@ -10,14 +11,19 @@ import {Patient} from '../patient';
 export class PatientDetailComponent implements OnInit {
   patient: Patient = null;
 
-  constructor(private patientService: PatientService, private zone: NgZone) {}
+  constructor(private patientService: PatientService, private zone: NgZone, private loc: Location,
+              @Inject(DOCUMENT) private document: any) {
+  }
 
-
+  domain = '';
   ngOnInit() {
     console.log('PatientDetailComponent - ngOnInit');
-
-    console.log(localStorage.getItem('aws_credentials'))
     this.getPatient();
+
+    this.domain = this.document.location.origin;
+
+    // console.log(this.loc.normalize('/providers/123'));
+
   }
 
   getPatient(): void {

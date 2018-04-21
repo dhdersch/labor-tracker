@@ -1,3 +1,4 @@
+
 <div *ngIf="patient">
 
   <p>
@@ -22,6 +23,25 @@
   <div><label>Room number:
     <input [(ngModel)]="patient.room_number" placeholder="room number"/>
   </label></div>
+
+
+  <div>
+    <label>Height (in):
+      <input [(ngModel)]="patient.height" placeholder="height"/>
+    </label>
+  </div>
+
+  <div>
+    <label>Weight (lbs):
+      <input [(ngModel)]="patient.weight" placeholder="weight"/>
+    </label>
+  </div>
+
+  <div>
+    <label>Provider Link: Give this link to users so they you can view their partograms.
+      <p>{{ domain + '/providers/' + patient.id }}</p>
+    </label>
+  </div>
 </div>
 
 

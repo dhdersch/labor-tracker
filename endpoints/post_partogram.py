@@ -1,20 +1,23 @@
-import boto3
-import os
 from botocore.exceptions import ClientError
-from endpoints.patient import PatientRepo
 from endpoints.helpers import *
 
+repo = make_repo()
 
-repo = PatientRepo(s3=boto3.resource('s3'),
-                   bucket=os.environ.get("BUCKET"),
-                   prefix="users/",
-                   s3_client=boto3.client('s3'))
+
+
 
 
 def handler(event, context):
+    print("making new partogram")
     identity = parse_identity(event)
+    patient_id = parse_patient_id(event)
+    if patient_id:
+        if repo.check_provider_has_patient_permissions(identity, patient_id):
+            identity = patient_id
+        else:
+            return make_response(403, {"error": "you do not have permissions"})
     try:
-        data = repo.make_new_partogram(identity)
+        data = repo.make_new_partogram(identity, json.loads(event['body']))
     except ClientError as e:
         return handle_client_error(e)
     return make_response(200, data)

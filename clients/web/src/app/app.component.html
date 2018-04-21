@@ -1,8 +1,18 @@
-<h1>{{title}}</h1>
-<nav>
-  <a routerLink="/patient">Patient</a>
-  <a routerLink="/logout">Log Out</a>
-</nav>
-<router-outlet></router-outlet>
 
+<div class="container">
+
+
+<div class="page-header">
+  <h1>{{title}}</h1>
+  <p>Track your cervical dilation with this user-friendly tool.</p>
+  <nav>
+    <a routerLink="/patient" routerLinkActive="active">Patient</a>
+    <a routerLink="/list-partograms" routerLinkActive="active">View Partograms</a>
+    <a routerLink="/providers" routerLinkActive="active">Trusted Providers</a>
+    <a routerLink="/logout" routerLinkActive="active">Log Out</a>
+  </nav>
+</div>
+
+<router-outlet></router-outlet>
+</div>
 

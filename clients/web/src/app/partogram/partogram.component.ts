@@ -1,348 +1,334 @@
-import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 
-import {
-  D3Service,
-  D3,
-  Axis,
-  BrushBehavior,
-  BrushSelection,
-  D3BrushEvent,
-  ScaleLinear,
-  ScaleOrdinal,
-  Selection,
-  Transition
-} from 'd3-ng2-service';
-import { PatientsService, DataPoints, Point } from '../patients.service';
-import { Http } from '@angular/http';
-import { select } from 'd3-ng2-service/src/bundle-d3';
+import * as downloader from 'save-svg-as-png';
+
+import {PartogramService} from '../partogram.service';
+import {Measurement, MeasurementData} from '../measurement';
+import {ActivatedRoute} from '@angular/router';
+import { D3Service, D3, Selection} from 'd3-ng2-service';
+import {PatientService} from '../patient.service';
+import {Patient, DataPoints, Point} from '../patient';
+import {AddMeasurementComponent} from '../add-measurement/add-measurement.component';
+import {Partogram} from '../partogram';
+import {MatDialog, MatDialogConfig} from '@angular/material';
 
 @Component({
-  selector: '.app-partogram',
+  selector: 'app-partogram',
   templateUrl: './partogram.component.html',
   styleUrls: ['./partogram.component.css'],
-  encapsulation: ViewEncapsulation.None
+  entryComponents: [AddMeasurementComponent]
 })
-
 export class PartogramComponent implements OnInit {
-    private d3: D3;
-    private parentNativeElement: any;
-    private d3Svg: Selection<SVGSVGElement, any, null, undefined>;
-    private serviceSubscription;
-    apiDilationsUrl: String = 'http://localhost:8080/dilations';
-    currentDilation = 0;
-    currentDuration = 0;
+  private d3: D3;
+  private parentNativeElement: any;
 
-    constructor(element: ElementRef, private ngZone: NgZone,
-                d3Service: D3Service, private patientService: PatientsService,
-                private http: Http) {
-        this.d3 = d3Service.getD3();
-        this.patientService = patientService;
-        this.parentNativeElement = element.nativeElement;
-    }
+  patient: Patient = new Patient();
 
-    ngOnInit() {
-        this.serviceSubscription = this.patientService.onChanged.subscribe({
-            next: async (data: DataPoints[]) => {
-                // console.log(event);
-                while (data.length > 1 && !data[0] && !data[1]) {
-                    await this.sleep(200);
-                    data = this.patientService.getDataPoints();
-                }
-                this.render(data);
-                this.updateInput(data);
-            }
+  partogram_id: string;
+  partogram: Partogram;
+  measurements: Measurement[];
+  constructor(
+    private partogramService: PartogramService,
+    private route: ActivatedRoute,
+    private element: ElementRef,
+    private d3Service: D3Service,
+    private patientService: PatientService,
+    private dialog: MatDialog
+  ) {
+    this.d3 = d3Service.getD3();
+    this.parentNativeElement = element.nativeElement;
+  }
+
+  openAddMeasurementDialog() {
+    // https://material.angular.io/components/dialog/overview
+    const dialogRef = this.dialog.open(AddMeasurementComponent, {
+      height: '355px',
+      width: '525px',
+      panelClass: 'add-measurement-modal',
+      hasBackdrop: true,
+      data: {
+        partogram_id: this.partogram_id,
+      }
+    }).afterClosed().subscribe(() =>
+      this.getMeasurements()
+    );
+
+  }
+
+  getPatientDetails(patient_id: string) {
+    return this.patientService.getPatient(patient_id).subscribe(patient => {
+      this.patient = patient;
+    });
+  }
+
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.partogram_id = params['partogram_id'];
+      this.partogramService.getPartogram(this.partogram_id).subscribe(partogram => {
+        this.partogram = partogram;
+        this.patientService.getPatient(partogram.patient_id).subscribe((p) => {
+          this.patient = p;
+          this.getMeasurements();
         });
-        this.render(this.patientService.getDataPoints());
+      });
+    });
+
+  }
+
+  getMeasurements(): void {
+    this.partogramService.getMeasurements(this.partogram_id).subscribe(measurements => {
+      this.measurements = measurements;
+      this.render(this.measurements);
+    });
+  }
+
+  getBMI(): number {
+    const metric_height = this.patient.height / 39.3700787;
+    const metric_weight = this.patient.weight / 2.20462;
+    const BMI = metric_weight / Math.pow(metric_height, 2);
+    return Math.round(BMI * 100) / 100;
+  }
+
+  saveSvg(): void {
+    downloader.saveSvgAsPng(document.getElementsByTagName('svg')[0], 'partogram.png', {
+      height: document.getElementsByTagName('svg')[0].height.baseVal.value + 100
+    });
+  }
+
+  removeMeasurement(measurementTime: Date): void {
+    console.log('removing measurement with time', measurementTime.getTime() / 1000);
+    const sub = this.partogramService.deleteMeasurement(this.partogram_id, measurementTime.getTime() / 1000)
+      .subscribe(r => {
+        this.getMeasurements();
+        sub.unsubscribe();
+      });
+  }
+
+  render(measurements: Measurement[]): void {
+    console.log('initial measurements', measurements);
+    if (measurements.length < 2) {
+      console.log('There should be at least 2 measurements before rendering the partogram!');
+      return;
+    }
+    console.log('Rendering');
+    const d3 = this.d3;
+    const svg = d3.select('svg');
+
+    const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+    const width = 600 - margin.left - margin.right;
+    const height = 300 - margin.top - margin.bottom;
+
+    svg.selectAll('*').remove();
+    svg
+      .attr('width', `${width}px`)
+      .attr('height', `${height}px`)
+      .append('g')
+      .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+    console.log('measurements sort', measurements);
+
+    const dp = this.getDystociaByBmi(this.getBMI());
+
+
+    const dyst_measurements = this.convertDpToMeasurement(new Date(this.partogram.labor_start_time * 1000), dp);
+
+    const all_measurements = measurements.concat(dyst_measurements);
+
+    all_measurements.sort(this.compareTime);
+
+    const timeExtent = d3.extent(all_measurements, (m) => m.time );
+    const minMeasurementTime = timeExtent[0];
+    const maxMeasurementTime = timeExtent[1];
+
+    const dilationExtent = d3.extent(all_measurements, (m) => m.dilation );
+    const minMeasurementDilation = dilationExtent[0];
+    const maxMeasurementDilation = dilationExtent[1];
+
+    const timeScale = d3.scaleTime().domain(timeExtent).range([0, width - margin.left]);
+    const dilationScale = d3.scaleLinear().domain(dilationExtent).range([height - margin.top, 0]);
+    const time_range = (maxMeasurementTime.getTime() - minMeasurementTime.getTime());
+
+    const time_width = {};
+    for (let i = 1; i < dyst_measurements.length; i++) {
+      time_width[dyst_measurements[i - 1].time.getTime()] =
+        (dyst_measurements[i].time.getTime() - dyst_measurements[i - 1].time.getTime()) / time_range * width;
     }
 
-    updateInput(dataPoints) {
-        let lastPoint:  Point = null;
-        if (dataPoints.length > 0 && dataPoints[0] !== undefined) {
-            if (dataPoints[0].values.length > 0) {
-                lastPoint = dataPoints[0].values[dataPoints[0].values.length - 1];
-                // update remaining dilation points
-                this.patientService.remainingDilations = [];
-                for (let i = lastPoint.hours + 1; i <= 10; i++) {
-                    this.patientService.remainingDilations.push(i);
-                }
+    time_width[dyst_measurements[dyst_measurements.length - 1].time.getTime()] = width;
+    const xAxis = d3.axisBottom(timeScale).tickFormat(d3.timeFormat('%H:%M'));
+    const yAxis = d3.axisLeft(dilationScale).ticks(10);
 
-                // update remaining duration points
-                this.patientService.remainingDurations = [];
-                for (let i = lastPoint.duration + 1; i <= 20; i += 0.5) {
-                    this.patientService.remainingDurations.push(i);
-                }
-            }
-        } else {
-            this.patientService.remainingDilations = [];
-            this.patientService.remainingDurations = [];
-            for (let i = 4; i < 11; i++) {
-                this.patientService.remainingDilations.push(i);
-            }
-            for (let i = 4; i < 21; i++) {
-                this.patientService.remainingDurations.push(i);
-            }
-        }
+    svg
+      .append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(xAxis)
+      .selectAll('text')
+      .style('text-anchor', 'end')
+      .attr('dx', '-.8em')
+      .attr('dy', '-.55em')
+      .attr('transform', 'rotate(-90)');
 
-        this.currentDilation = this.patientService.remainingDilations.length > 0 ? this.patientService.remainingDilations[0] : null;
-        this.currentDuration = this.patientService.remainingDurations.length > 0 ? this.patientService.remainingDurations[0] : null;
+    svg
+      .append('g')
+      .attr('class', 'y axis')
+      .call(yAxis)
+      .append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', 6)
+      .attr('dy', '.71em')
+      .style('text-anchor', 'end')
+      .text('Value');
+
+    // Add the scatterplot
+    svg.selectAll('dot')
+      .data(measurements)
+      .enter().append('circle')
+      .attr('r', 3.5)
+      .attr('cx', (d: Measurement) => {
+        return timeScale(d.time);
+      })
+      .attr('cy', (d: Measurement) => {
+        return dilationScale(d.dilation);
+      });
+
+    svg
+      .selectAll('bar')
+      .data(dyst_measurements)
+      .enter()
+      .append('rect')
+      .style('fill', 'red')
+      .style('opacity', '0.2')
+      .attr('x', (d: Measurement) => {
+        console.log('bar x', d.time);
+        return timeScale(d.time);
+      })
+      .attr('width', (d: Measurement) => {
+        const w = time_width[d.time.getTime()];
+        // console.log('bar width', w);
+        return w;
+      })
+      .attr('y', (d: Measurement) => {
+        return dilationScale(d.dilation);
+      })
+      .attr('height', (d: Measurement) => {
+        const pixels = height - dilationScale(d.dilation);
+        return  pixels;
+      });
+  }
+
+  getStatus() {
+    const dp = this.getDystociaByBmi(this.getBMI());
+    const most_recent = this.measurements[this.measurements.length - 1];
+    const elapsed_hours = (most_recent.time.getTime() / 1000 - this.partogram.labor_start_time) / 60;
+    const point = dp.match(elapsed_hours);
+    const dilation_difference = most_recent.dilation - point.dilation;
+    return {
+      'dilation_difference': dilation_difference,
+      'elapsed_hours': elapsed_hours,
+      'typical_dilation': point.dilation,
+      'message': dilation_difference > 0 ? 'OK' : 'WARN',
+    };
+  }
+
+  convertDpToMeasurement(start_time: Date, bp: DataPoints): Measurement[] {
+    const dp_measurements: Measurement[] = [];
+    for (const bp_val of bp.values){
+      const m = new Measurement();
+      m.time = new Date(start_time.getTime() + (bp_val.hours * 60 * 60 * 1000));
+      m.dilation = bp_val.dilation;
+      dp_measurements.push(m);
     }
+    return dp_measurements;
+  }
 
-    async sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+  getDystociaByBmi(bmi: number): DataPoints {
+    console.log('getting dyst values for bmi', bmi)
+    const currentBmi = bmi;
+    if (currentBmi < 25) {
+      return new DataPoints(
+        'Dystocia for BMI (< 25)',
+        [
+          new Point(5, 4.6),
+          new Point(6, 7.5),
+          new Point(7, 9.5),
+          new Point(8, 11.0),
+          new Point(9, 12.3),
+          new Point(10, 13.9)
+        ],
+        '#FFCE67'
+      );
+    } else if (currentBmi >= 25 && currentBmi < 30) {
+      return new DataPoints(
+        'Dystocia for BMI (25-30)',
+        [
+          new Point(5, 5.0),
+          new Point(6, 7.9),
+          new Point(7, 9.9),
+          new Point(8, 11.4),
+          new Point(9, 12.7),
+          new Point(10, 14.4)
+        ],
+        '#FFCE67'
+      );
+    } else if (currentBmi >= 30 && currentBmi < 35) {
+      return new DataPoints(
+        'Dystocia for BMI (30-35)',
+        [
+          new Point(5, 5.2),
+          new Point(6, 8.3),
+          new Point(7, 10.4),
+          new Point(8, 11.9),
+          new Point(9, 13.3),
+          new Point(10, 15.1)
+        ],
+        '#FFCE67'
+      );
+    } else if (currentBmi >= 35 && currentBmi < 40) {
+      return new DataPoints(
+        'Dystocia for BMI (35-40)',
+        [
+          new Point(5, 5.9),
+          new Point(6, 9.4),
+          new Point(7, 11.7),
+          new Point(8, 13.4),
+          new Point(9, 14.7),
+          new Point(10, 16.6)
+        ],
+        '#FFCE67'
+      );
+    } else if (currentBmi >= 40) {
+      return new DataPoints(
+        'Dystocia for BMI (> 40)',
+        [
+          new Point(5, 7.4),
+          new Point(6, 11.6),
+          new Point(7, 14.1),
+          new Point(8, 15.8),
+          new Point(9, 17.2),
+          new Point(10, 19.1)
+        ],
+        '#FFCE67'
+      );
     }
+  }
 
-    render(dataPoints) {
-        if (!dataPoints[0]) {
-            return;
-        }
-        const self = this;
-        const d3 = this.d3;
-        let d3ParentElement: any;
-        let svg: any;
-        let name: string;
-        let yVal: number;
-        const colors: any = [];
-        const padding: number = 25;
-        const margin = {top: 20, right: 20, bottom: 30, left: 50};
-        const width = 600 - margin.left - margin.right;
-        const height = 300 - margin.top - margin.bottom;
-        let xScale: any;
-        let yScale: any;
-        let xColor: any;
-        let xAxis: any;
-        let yAxis: any;
-
-        // var parseDate = d3.timeParse('%Y');
-        if (this.parentNativeElement !== null) {
-            svg = d3.select('svg');
-            svg.selectAll('*').remove();
-            const data = dataPoints;
-
-            const duration = 250;
-
-            const lineOpacity = '0.25';
-            const lineOpacityHover = '0.85';
-            const otherLinesOpacityHover = '0.1';
-            const lineStroke = '2.5px';
-            const lineStrokeHover = '3.5px';
-
-            const circleOpacity = '0.85';
-            const circleOpacityOnLineHover = '1';
-            const circleRadius = 3;
-            const circleRadiusHover = 6;
-
-            const mouseOver = function(d, i) {
-                d3.selectAll(`.line${i}`)
-                            .style('opacity', otherLinesOpacityHover);
-                d3.selectAll(`.circle`)
-                            .style('opacity', circleOpacityOnLineHover)
-                            .style('stroke-width', 1)
-                            .style('stroke', 'black');
-                d3.selectAll(`.legend${i}`)
-                            .style('stroke-width', .5)
-                            .style('stroke', 'black');
-                d3.select(this)
-                    .style('opacity', lineOpacityHover)
-                    .style('stroke-width', lineStrokeHover)
-                    .style('cursor', 'pointer');
-            };
-
-            const mouseOut = function(d, i) {
-                d3.selectAll(`.line${i}`)
-                            .style('opacity', lineOpacity);
-                d3.selectAll('.circle')
-                            .style('opacity', circleOpacity)
-                            .style('stroke-width', 0);
-                d3.selectAll(`.legend${i}`)
-                            .style('stroke-width', 0);
-                d3.select(this)
-                    .style('stroke-width', lineStroke)
-                    .style('cursor', 'none');
-            };
-
-            /* Scale */
-            xScale = d3.scaleTime()
-                .domain([0, 20])
-                .range([0, width - margin.left]);
-
-            yScale = d3.scaleLinear()
-                .domain([4, 10])
-                .range([height - margin.top, 0]);
-
-            const color = d3.scaleOrdinal(d3.schemeCategory10);
-
-            /* Area Below */
-            const areaBelow = d3.area<Point>()
-                .x((d: Point) => xScale(d.duration))
-                .y0(height - margin.top)
-                .y1((d: Point) => yScale(d.hours));
-
-            /* Area Below */
-            const areaAbove = d3.area<Point>()
-                .x((d: Point) => xScale(d.duration))
-                .y0(0)
-                .y1((d: Point) => yScale(d.hours));
-
-            /* Add SVG */
-            svg.attr('width', `${width}px`)
-                .attr('height', `${height}px`)
-                .append('g')
-                .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-            /* Add line into SVG */
-            const line = d3.line<Point>()
-                .curve(d3.curveCatmullRom)
-                .x((d: Point) => xScale(d.duration))
-                .y((d: Point) => yScale(d.hours));
-            const transition = d3.transition()
-                .duration(500)
-                .ease(d3.easeLinear);
-
-            const lines = svg.append('g')
-                .attr('class', 'lines');
-
-            lines.selectAll('.line-group')
-                .data(data).enter()
-                .append('g')
-                .attr('class', 'line-group')
-                .on('mouseover', function(d, i) {
-                    svg.append('text')
-                    .attr('class', 'title-text')
-                    .style('fill', d.color)
-                    .text(d.name)
-                    .attr('text-anchor', 'middle')
-                    .attr('x', (margin.left) + 100)
-                    .attr('y', 5);
-                })
-                .on('mouseout', d => svg.select('.title-text').remove())
-                .append('path')
-                .attr('class', (d, i) => `line line${i}`)
-                .attr('d', d => areaBelow(d.values))
-                .style('stroke', (d, i) => d.color)
-                .style('fill', (d, i) => d.color)
-                .style('opacity', lineOpacity)
-                .style('stroke-width', lineStroke)
-                .on('mouseover', mouseOver)
-                .on('mouseout', mouseOut);
-
-            /* Add circles in the line */
-            lines.selectAll('.circle-group')
-                .data(data).enter()
-                .append('g')
-                .style('fill', (d, i) => d.color)
-                .selectAll('circle')
-                .data(d => d.values).enter()
-                .append('g')
-                .attr('class', (d, i) => `circle circle${i}`)
-                .on('mouseover', function(d) {
-                    d3.select(this)
-                    .style('cursor', 'pointer')
-                    .style('stroke-width', 1)
-                    .style('stroke', 'black')
-                    .append('text')
-                    .attr('class', 'text')
-                    .text(`${d.duration} hrs, ${d.hours} cm`)
-                    .attr('x', (p: Point) => xScale(p.duration) + 5)
-                    .attr('y', (p: Point) => yScale(p.hours) - 10);
-                })
-                .on('mouseout', function(d) {
-                    d3.select(this)
-                    .style('cursor', 'none')
-                    .style('stroke-width', 0)
-                    .selectAll('.text').remove();
-                })
-                .append('circle')
-                .attr('cx', d => xScale(d.duration))
-                .attr('cy', d => yScale(d.hours))
-                .attr('r', circleRadius)
-                .style('opacity', circleOpacity)
-                .on('mouseover', function(d) {
-                    d3.select(this)
-                        .attr('r', circleRadiusHover);
-                })
-                .on('mouseout', function(d) {
-                    d3.select(this)
-                        .attr('r', circleRadius);
-                });
-
-            lines.transition(transition);
-            lines.exit().remove();
-            /* Add Axis into SVG */
-            xAxis = d3.axisBottom(xScale).ticks(20).tickFormat(d3.format('.1f'));
-            yAxis = d3.axisLeft(yScale).ticks(7).tickFormat(d3.format('.0s'));
-
-            const xLine = svg.append('g');
-            xLine.transition(transition)
-                .attr('class', 'x axis')
-                .attr('transform', `translate(0, ${height - margin.top})`)
-                .call(xAxis);
-            xLine.append('text')
-                .transition(transition)
-                .attr('x', `${width - margin.left - 25}`)
-                .attr('y', -10)
-                .attr('fill', '#000')
-                .text('Duration (hrs)');
-
-            const yLine = svg.append('g');
-            yLine.transition(transition)
-                .attr('class', 'y axis')
-                .call(yAxis);
-            yLine.append('text')
-                .transition(transition)
-                .attr('y', 15)
-                .attr('transform', 'rotate(-90)')
-                .attr('fill', '#000')
-                .text('Dilation (inches)');
-
-            // Nest the entries by series
-            const dataNest = d3.nest()
-                .key((d: DataPoints) => d.name)
-                .entries(data);
-
-            const legendSpace = width / dataNest.length; // spacing for the legend
-
-            // Loop through each series / key
-            const legendY = height + margin.top;
-            const legendX = margin.left + 10;
-            dataNest.forEach(function(d, i) {
-                const legend = svg.append('circle');
-                legend.transition(transition);
-                legend.attr('cx', legendX + (legendSpace * i) - 15)  // space legend
-                    .attr('cy', legendY - 5)
-                    .attr('r', '0.4em')
-                    .attr('class', `legend${i}`)    // style the legend
-                    .style('fill', data[i].color);
-
-                // Add the Legend
-                const legendText = svg.append('text');
-                legendText.transition(transition);
-                legendText.attr('x', legendX + (legendSpace * i))  // space legend
-                    .attr('y', legendY)
-                    .attr('class', `legend${i}`)    // style the legend
-                    .style('fill', data[i].color)
-                    .text(d.key);
-            });
-        }
+  compareTime(a, b) {
+    if (a.time < b.time) {
+      return -1;
     }
-
-    onNewDilationClick() {
-        const patient = this.patientService.getCurrentPatient();
-        this.http.post(this.apiDilationsUrl + `/${patient.patientId}`,
-                      {dilation: this.currentDilation,
-                       duration: this.currentDuration})
-        .toPromise()
-        .then((response) => {
-            if (response.ok) {
-                const dataPoints = this.patientService.getDataPoints();
-                dataPoints[0].values.push(new Point(this.currentDilation, this.currentDuration));
-                this.patientService.getPatientStatus(this.patientService.getCurrentPatient());
-                this.updateInput(dataPoints);
-                this.render(dataPoints);
-            }
-        });
+    if (a.time > b.time) {
+      return 1;
     }
-
-    cleanup() {
-        this.serviceSubscription.unsubscribe();
+    return 0;
+  }
+  compareDilation(a, b) {
+    if (a.dilation < b.dilation) {
+      return -1;
     }
+    if (a.dilation > b.dilation) {
+      return 1;
+    }
+    return 0;
+  }
 }

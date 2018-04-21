@@ -23,8 +23,14 @@ export class LoginComponent implements OnInit {
 
     const authResponse: AuthResponse = googleUser.getAuthResponse();
 
+    const profile = googleUser.getBasicProfile();
+    console.log('Google ID', profile.getId());
+    console.log('Google Email', profile.getEmail());
+    console.log('Google Name', profile.getName());
+
     localStorage.setItem('google_expires_at', authResponse.expires_at);
     localStorage.setItem('google_id_token', authResponse.id_token);
+    localStorage.setItem('google_name', profile.getName());
 
     const r_var = new AWS.CognitoIdentityCredentials({
       IdentityPoolId: 'us-east-1:5e49b927-e94b-48b6-b0ad-a1f9b2a26eb0', // your identity pool id here
@@ -37,16 +43,16 @@ export class LoginComponent implements OnInit {
     const r = this.router;
     const zone = this.zone;
     r_var.get(function(err) {
-      console.log(AWS.config.credentials);
+      // console.log(AWS.config.credentials);
 
       const item = {
         'accessKeyId': AWS.config.credentials.accessKeyId,
         'sessionToken': AWS.config.credentials.sessionToken,
         'secretAccessKey': AWS.config.credentials.secretAccessKey,
         'expireTime': AWS.config.credentials['expireTime']
-      }
+      };
 
-      localStorage.setItem('aws_credentials', JSON.stringify(item))
+      localStorage.setItem('aws_credentials', JSON.stringify(item));
 
       zone.run(() => r.navigate(['/patient']));
     });

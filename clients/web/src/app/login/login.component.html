@@ -1,12 +1,9 @@
-<h1>Login</h1>
-
-<div>
-<google-signin
-  [clientId]="myClientId"
-  [width]="myWidth"
-  [theme]="myTheme"
-  [scope]="myScope"
-  [longTitle]="myLongTitle"
-  (googleSignInSuccess)="onGoogleSignInSuccess($event)">
-</google-signin>
-</div>
+	<h1>Labor Tracker Login</h1>
+	<google-signin
+	  [clientId]="myClientId"
+	  [width]="myWidth"
+	  [theme]="myTheme"
+	  [scope]="myScope"
+	  [longTitle]="myLongTitle"
+	  (googleSignInSuccess)="onGoogleSignInSuccess($event)">
+	</google-signin>
