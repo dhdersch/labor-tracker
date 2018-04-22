@@ -21,8 +21,8 @@ This file acts as a table of contents for the Labor Tracker Project. To view the
 
 ## Table of Contents
 
-* [Catalog](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Catalog%20-%20Cloud%20Regency.pdf)
-* [Final Gantt Chart](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Final%20Gantt%20Chart%20-%20Cloud%20Regency.pdf)
+* [Catalog](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/catalog.pdf)
+* [Final Gantt Chart](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Final%20Gantt%20Chart%20%E2%80%93%20Cloud%20Regency.pdf)
 * [Manual](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Manual%20-%20Cloud%20Regency.pdf)
 * [Special Instructions](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Special%20Instructions%20-%20Cloud%20Regency.pdf)
 * [Research](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/tree/master/Final%20Delivery/Research)
