@@ -29,3 +29,4 @@ This file acts as a table of contents for the Labor Tracker Project. To view the
 * [Front-End Code](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/tree/master/clients/web) - located in the **/clients/web** directory. This is an Angular app and is written in TypeScript, HTML, and CSS.
 * [Back-end Code](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/tree/master/endpoints) - located in the **/endpoints** directory. It is written in Python and deployed to AWS Lambda.
 * **serverless.yml** in the root directory is used to deploy the Back-end code using the Serverless Framework.
+
