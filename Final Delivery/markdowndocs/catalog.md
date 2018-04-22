@@ -5,7 +5,7 @@ This file acts as a table of contents for the Labor Tracker Project. To view the
 
 ## Team Details
 
-| Key | Value |
+| Detail Name | Detail Value |
 | -------- | -------- |
 | Team Name | Cloud Regency |
 | Project Name | The Labor Tracker |
@@ -21,8 +21,11 @@ This file acts as a table of contents for the Labor Tracker Project. To view the
 
 ## Table of Contents
 
-* [Catalog](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Catalog%20-%20Cloud%20Regency.pdf)
-* [Final Gantt Chart](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Final%20Gantt%20Chart%20-%20Cloud%20Regency.pdf)
-* [Manual](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Manual%20-%20Cloud%20Regency.pdf)
-* [Special Instructions](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Special%20Instructions%20-%20Cloud%20Regency.pdf)
-* [Research](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/tree/master/Final%20Delivery/Research)
+* [Catalog](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Catalog%20-%20Cloud%20Regency.pdf) - This Document
+* [Final Gantt Chart](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Final%20Gantt%20Chart%20-%20Cloud%20Regency.pdf) - Shows the features and deliverables and who completed them
+* [Manual](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Manual%20-%20Cloud%20Regency.pdf) - instructions for using The Labor Tracker
+* [Special Instructions](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/blob/master/Final%20Delivery/Special%20Instructions%20-%20Cloud%20Regency.pdf) - instructions for finding the website
+* [Research](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/tree/master/Final%20Delivery/Research) - overview of the research we did to complete the Labor Tracker.
+* [Front-End Code](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/tree/master/clients/web) - located in the **/clients/web** directory. This is an Angular app and is written in TypeScript, HTML, and CSS.
+* [Back-end Code](https://github.gatech.edu/gt-hit-spring2018/Labor-Tracker/tree/master/endpoints) - located in the **/endpoints** directory. It is written in Python and deployed to AWS Lambda.
+* **serverless.yml** in the root directory is used to deploy the Back-end code using the Serverless Framework.
