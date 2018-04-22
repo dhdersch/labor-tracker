@@ -1,55 +1,20 @@
-# Labor-Tracker
-Labor Tracker Application
+# Overview
 
-docker-compose up
+The Labor Tracker is a Web application for women in labor to track their cervical dilation.
 
-API Base Path:
-localhost:8080/
+# Technical Details
 
+The Web application front-end is an [Angular](https://angular.io/) application. The backend is written in [Python](https://www.python.org/). The application is deployed to [Amazon Web Services](https://aws.amazon.com/). The front-end is deployed to an [S3 Bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) as an [S3-Hosted Website](https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html).
 
-## Server
-The server is built using the serverless framework and builds a single lambda behind one api gateway proxy.
+# Technologies
 
-To run the server locally:
+The Labor Tracker utilizes the following technologies:
 
-Dependencies: 
-
-1. node >= 8
-
-Directions (within the /server directory): 
-
-2. npm install
-3. sls deploy --profile {your profile}
-
-
-## Client
-
-ng serve
-
-localhost:4200
-
-
-## Old stuff
-
-FROM node
-
-RUN apt-get update
-RUN apt-get install -yqq default-jdk maven
-RUN npm install angular-cli
-
-# Init
-RUN mkdir /app
-WORKDIR /app
-COPY ./ /app
-
-WORKDIR /app/clients/web
-RUN ls /app/clients/web
-RUN ls
-RUN $(npm bin)/ng build
-WORKDIR /app
-
-RUN mv /app/clients/web/dist /app/src/main/resources/static
-
-RUN mvn clean install -DskipTests=true
-
-CMD ["mvn", "spring-boot:run"]
+* [Angular](https://angular.io/)
+* [Python](https://www.python.org/)
+* [Serverless Framework](https://serverless.com/)
+* [DynamoDB](https://aws.amazon.com/dynamodb/)
+* [Simple Storage Service (S3)](https://aws.amazon.com/s3/)
+* [API Gateway](https://aws.amazon.com/api-gateway/)
+* [Bootstrap](https://getbootstrap.com/)
+* [d3js](https://d3js.org/)
